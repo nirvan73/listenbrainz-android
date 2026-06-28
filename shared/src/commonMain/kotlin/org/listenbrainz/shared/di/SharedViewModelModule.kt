@@ -35,7 +35,6 @@ val sharedViewModelModule = module {
     viewModel { PlaylistViewModel(get(),get(named(IO_DISPATCHER)),get(named(DEFAULT_DISPATCHER))) }
     viewModel { BPAlbumViewModel(get(),get(named(IO_DISPATCHER))) }
     viewModel { BPArtistViewModel(get(),get(named(IO_DISPATCHER))) }
-    viewModel { ListensViewModel(get(),get(),get(),get(),get(named(DEFAULT_DISPATCHER))) }
     viewModel { ListeningNowViewModel(get(),get(),get(),get(named(IO_DISPATCHER))) }
     viewModel { PlaylistDataViewModel(get(),get(),get(),get(named(IO_DISPATCHER)),get(named(DEFAULT_DISPATCHER)),get<StringProvider>()) }
     viewModel { SocialViewModel(get(),get(),get(),get(),get(named(IO_DISPATCHER)),get(named(DEFAULT_DISPATCHER)),get<StringProvider>()) }
