@@ -93,7 +93,7 @@ object TypeConverter {
         }
     }
 
-    fun stringFromEpochTime(microSeconds: Long, dateFormat: DateTimeFormat<LocalDateTime> = LocalDateTime.Format {
+    fun stringFromEpochSeconds(epochSeconds: Long, dateFormat: DateTimeFormat<LocalDateTime> = LocalDateTime.Format {
         monthName(MonthNames.ENGLISH_ABBREVIATED)
         char(' ')
         dayOfMonth(Padding.ZERO)
@@ -105,7 +105,7 @@ object TypeConverter {
         char(' ')
         amPmMarker("AM","PM")
     }): String {
-        val instant = Instant.fromEpochMilliseconds(microSeconds / 1000)
+        val instant = Instant.fromEpochSeconds(epochSeconds)
         val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
         return localDateTime.format(dateFormat)
     }
