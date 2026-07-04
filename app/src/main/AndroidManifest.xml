@@ -63,15 +63,6 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
-        <service
-            android:name=".service.BrainzPlayerService"
-            android:foregroundServiceType="mediaPlayback"
-            android:exported="true"
-            android:permission="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK">
-            <intent-filter>
-                <action android:name="android.media.browse.MediaBrowserService" />
-            </intent-filter>
-        </service> <!-- TODO: To receive events from wired devices -->
         <!--
         <receiver android:name="androidx.media.session.MediaButtonReceiver"
             android:exported="true">

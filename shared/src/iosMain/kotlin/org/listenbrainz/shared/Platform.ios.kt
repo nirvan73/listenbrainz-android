@@ -25,7 +25,6 @@ import org.listenbrainz.shared.repository.remoteplayer.RemotePlaybackHandler
 import org.listenbrainz.shared.service.ListensService
 import org.listenbrainz.shared.service.UserService
 import org.listenbrainz.shared.service.YouTubeApiService
-import org.listenbrainz.shared.di.database.BrainzPlayerDatabase
 import org.listenbrainz.shared.util.IosSongsData
 import org.listenbrainz.shared.util.SongsData
 import org.listenbrainz.shared.util.AlbumsData
@@ -69,13 +68,6 @@ actual fun provideRemotePlaybackHandler(
     youTubeApiService: YouTubeApiService
 ): RemotePlaybackHandler {
     return IosRemotePlaybackHandlerImpl(youTubeApiService)
-}
-
-actual fun getBrainzPlayerDatabase(): RoomDatabase.Builder<BrainzPlayerDatabase> {
-    val brainzPlayerDB = documentDirectory() + "/brainzplayer_database.db"
-    return Room.databaseBuilder<BrainzPlayerDatabase>(
-        name = brainzPlayerDB
-    )
 }
 
 @OptIn(ExperimentalForeignApi::class)

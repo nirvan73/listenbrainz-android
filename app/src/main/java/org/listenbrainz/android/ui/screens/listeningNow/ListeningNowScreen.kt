@@ -1,4 +1,4 @@
-package org.listenbrainz.android.ui.screens.brainzplayer
+package org.listenbrainz.android.ui.screens.listeningNow
 
 import android.util.Log
 import androidx.activity.compose.BackHandler
@@ -40,16 +40,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.koin.androidx.compose.koinViewModel
 import coil3.compose.AsyncImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import org.listenbrainz.android.R
+import org.listenbrainz.android.ui.components.basicMarquee
+import org.listenbrainz.android.ui.theme.ListenBrainzTheme
 import org.listenbrainz.shared.model.AdditionalInfo
 import org.listenbrainz.shared.model.Listen
 import org.listenbrainz.shared.model.TrackMetadata
-import org.listenbrainz.android.ui.screens.brainzplayer.ui.components.basicMarquee
-import org.listenbrainz.android.ui.theme.ListenBrainzTheme
 import org.listenbrainz.shared.viewmodel.ListeningNowUIState
 import org.listenbrainz.shared.viewmodel.ListeningNowViewModel
 
