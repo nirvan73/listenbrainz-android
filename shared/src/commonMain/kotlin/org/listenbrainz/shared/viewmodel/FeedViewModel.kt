@@ -41,7 +41,6 @@ import org.listenbrainz.shared.ui.screens.feed.MyFeedPagingSource
 import org.listenbrainz.shared.ui.screens.feed.SimilarListensPagingSource
 import org.listenbrainz.shared.util.Log
 import org.listenbrainz.shared.util.Resource
-import kotlin.collections.get
 
 class FeedViewModel(
     private val feedRepository: FeedRepository,

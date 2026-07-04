@@ -17,8 +17,6 @@ import org.listenbrainz.shared.util.Log
 import org.listenbrainz.shared.util.TypeConverter
 import org.listenbrainz.shared.util.Utils.getArticle
 import kotlin.time.Clock
-import kotlin.time.Duration.Companion.microseconds
-import kotlin.time.Duration.Companion.seconds
 
 /**
  * @param icon Feed icon for the event, **must** be of width 19 dp.
@@ -308,10 +306,10 @@ enum class FeedEventType (
         fun isUserSelf(event: FeedEvent, parentUser: String): Boolean =
             event.username == parentUser
         
-        /** @param createdMus is the time event was created in **Microseconds**.*/
-        fun getTimeStringForFeed(createdMus: Long): String {
+        /** @param createdSeconds is the time event was created in **Seconds**.*/
+        fun getTimeStringForFeed(createdSeconds: Long): String {
     
-            val differenceInSeconds = Clock.System.now().epochSeconds - createdMus.microseconds.inWholeSeconds
+            val differenceInSeconds = Clock.System.now().epochSeconds - createdSeconds
             val differenceInMinutes = differenceInSeconds / 60
             val differenceInHours = differenceInMinutes / 60
             
@@ -320,7 +318,7 @@ enum class FeedEventType (
                 differenceInSeconds in 1..59 -> "$differenceInSeconds second${showPlural(differenceInSeconds)} ago"
                 differenceInMinutes in 1..59 -> "$differenceInMinutes minute${showPlural(differenceInMinutes)} ago"
                 differenceInHours in 1..23 -> "$differenceInHours hour${showPlural(differenceInHours)} ago"
-                else -> TypeConverter.stringFromEpochTime(createdMus)
+                else -> TypeConverter.stringFromEpochSeconds(createdSeconds)
             }
         }
         
