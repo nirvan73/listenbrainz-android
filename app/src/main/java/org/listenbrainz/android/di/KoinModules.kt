@@ -219,7 +219,6 @@ val appModule = module {
     single<ListenServiceManager> {
         ListenServiceManagerImpl(scheduler = get(), get(), androidContext())
     }
-
     single<BuildInfo>{
         BuildInfo(
             applicationId = BuildConfig.APPLICATION_ID,
