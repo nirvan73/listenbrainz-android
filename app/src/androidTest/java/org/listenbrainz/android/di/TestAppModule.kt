@@ -13,7 +13,6 @@ import org.koin.dsl.module
 import org.listenbrainz.android.repository.listenservicemanager.ListenServiceManager
 import org.listenbrainz.android.repository.listenservicemanager.ListenServiceManagerImpl
 import org.listenbrainz.shared.repository.AppPreferences
-import org.listenbrainz.android.service.BrainzPlayerServiceConnection
 import org.listenbrainz.shared.di.DEFAULT_DISPATCHER
 import org.listenbrainz.shared.di.IO_DISPATCHER
 import org.listenbrainz.shared.di.MAIN_DISPATCHER
@@ -31,10 +30,6 @@ val testAppModule = module {
         
         WorkManagerTestInitHelper.initializeTestWorkManager(context, config)
         WorkManager.getInstance(context)
-    }
-    
-    single<BrainzPlayerServiceConnection> {
-        BrainzPlayerServiceConnection(get(), get(), get())
     }
     
     single<ListenServiceManager> {

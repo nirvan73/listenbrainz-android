@@ -23,8 +23,6 @@ import org.listenbrainz.shared.repository.remoteplayer.RemotePlaybackHandler
 import org.listenbrainz.shared.service.ListensService
 import org.listenbrainz.shared.service.UserService
 import org.listenbrainz.shared.service.YouTubeApiService
-import org.listenbrainz.shared.di.database.BrainzPlayerDatabase
-import org.listenbrainz.shared.repository.PlatformContext
 import org.listenbrainz.shared.util.AndroidSongsData
 import org.listenbrainz.shared.util.SongsData
 import org.listenbrainz.shared.util.AlbumsData
@@ -65,15 +63,6 @@ actual fun provideRemotePlaybackHandler(
     youTubeApiService: YouTubeApiService
 ): RemotePlaybackHandler {
     return AndroidRemotePlaybackHandlerImpl(youTubeApiService)
-}
-
-
-actual fun getBrainzPlayerDatabase(): RoomDatabase.Builder<BrainzPlayerDatabase> {
-    val brainzPlayerDb = applicationContext.getDatabasePath("brainzplayer_database")
-    return Room.databaseBuilder<BrainzPlayerDatabase>(
-        context = applicationContext,
-        name = brainzPlayerDb.absolutePath
-    )
 }
 
 actual fun provideListensRepositoryImpl(

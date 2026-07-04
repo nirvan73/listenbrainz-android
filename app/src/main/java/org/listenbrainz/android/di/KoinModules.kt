@@ -1,12 +1,8 @@
 package org.listenbrainz.android.di
 
 import android.content.Context
-import android.support.v4.media.MediaMetadataCompat
 import androidx.work.WorkManager
 import com.chuckerteam.chucker.api.ChuckerInterceptor
-import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.audio.AudioAttributes
 import de.jensklingenberg.ktorfit.Ktorfit
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
@@ -37,7 +33,6 @@ import org.listenbrainz.android.repository.yim.YimRepository
 import org.listenbrainz.android.repository.yim.YimRepositoryImpl
 import org.listenbrainz.android.repository.yim23.Yim23Repository
 import org.listenbrainz.android.repository.yim23.Yim23RepositoryImpl
-import org.listenbrainz.android.service.BrainzPlayerServiceConnection
 import org.listenbrainz.android.service.GithubAppUpdatesService
 import org.listenbrainz.android.service.GithubUpdatesDownloadService
 import org.listenbrainz.android.service.Yim23Service
@@ -49,11 +44,8 @@ import org.listenbrainz.android.util.AppStringProvider
 import org.listenbrainz.shared.util.Constants.GITHUB_API_BASE_URL
 import org.listenbrainz.shared.util.Constants.LISTENBRAINZ_API_BASE_URL
 import org.listenbrainz.shared.util.Constants.LISTENBRAINZ_BETA_API_BASE_URL
-import org.listenbrainz.android.util.LocalMusicSource
-import org.listenbrainz.android.util.MusicSource
 import org.listenbrainz.android.viewmodel.AboutViewModel
 import org.listenbrainz.android.viewmodel.AppUpdatesViewModel
-import org.listenbrainz.android.viewmodel.BrainzPlayerViewModel
 import org.listenbrainz.android.viewmodel.DashBoardViewModel
 import org.listenbrainz.android.viewmodel.Yim23ViewModel
 import org.listenbrainz.android.viewmodel.YimViewModel
@@ -220,10 +212,6 @@ val appModule = module {
         ListenServiceManagerImpl(get(), get(), androidContext())
     }
 
-    single<BrainzPlayerServiceConnection> {
-        BrainzPlayerServiceConnection(androidContext(), get(), get())
-    }
-
     single<BuildInfo>{
         BuildInfo(
             applicationId = BuildConfig.APPLICATION_ID,
@@ -242,32 +230,12 @@ val repositoryModule = module {
     // API Repositories
     single<YimRepository> { YimRepositoryImpl(get()) }
     single<Yim23Repository> { Yim23RepositoryImpl(get()) }
-    single<AppUpdatesRepository> { AppUpdatesRepositoryImpl(get(), get(), get(named(IO_DISPATCHER))) }
-
-}
-
-// Service Module for BrainzPlayer
-val playerModule = module {
-    single<AudioAttributes> {
-        AudioAttributes.Builder()
-            .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
-            .setUsage(C.USAGE_MEDIA)
-            .build()
-    }
-
-    single<ExoPlayer> {
-        ExoPlayer.Builder(androidContext()).build().apply {
-            setAudioAttributes(get<AudioAttributes>(), true)
-            setHandleAudioBecomingNoisy(true)
-        }
-    }
-
-    single<MusicSource<MediaMetadataCompat>> {
-        LocalMusicSource(get(), get(), get(), get())
-    }
-
-    single<LocalMusicSource> {
-        LocalMusicSource(get(), get(), get(), get())
+    single<AppUpdatesRepository> {
+        AppUpdatesRepositoryImpl(
+            get(),
+            get(),
+            get(named(IO_DISPATCHER))
+        )
     }
 }
 
@@ -276,7 +244,6 @@ val viewModelModule = module {
     viewModel { AppUpdatesViewModel(get(), get(), get()) }
     viewModel { YimViewModel(get(), get(), get(named(IO_DISPATCHER)), get(named(DEFAULT_DISPATCHER))) }
     viewModel { Yim23ViewModel(get(), get(), get(), get(named(IO_DISPATCHER)), get(named(DEFAULT_DISPATCHER))) }
-    viewModel { BrainzPlayerViewModel(get(), get(), get(), get(), get(), get(named(IO_DISPATCHER))) }
     viewModel { AboutViewModel() }
 }
 
@@ -285,7 +252,6 @@ val appModules = listOf(
     networkModule,
     appModule,
     repositoryModule,
-    playerModule,
     viewModelModule,
     sharedViewModelModule,
     sharedNetworkServiceModule,

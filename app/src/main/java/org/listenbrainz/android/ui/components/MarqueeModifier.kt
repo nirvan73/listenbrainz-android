@@ -1,4 +1,4 @@
-package org.listenbrainz.android.ui.screens.brainzplayer.ui.components
+package org.listenbrainz.android.ui.components
 
 /*
  * Copyright 2022 The Android Open Source Project
@@ -58,8 +58,8 @@ import kotlin.math.ceil
 import kotlin.math.roundToInt
 import kotlin.math.sign
 import kotlinx.coroutines.flow.collectLatest
-import org.listenbrainz.android.ui.screens.brainzplayer.ui.components.MarqueeAnimationMode.Companion.Immediately
-import org.listenbrainz.android.ui.screens.brainzplayer.ui.components.MarqueeAnimationMode.Companion.WhileFocused
+import org.listenbrainz.android.ui.components.MarqueeAnimationMode.Companion.Immediately
+import org.listenbrainz.android.ui.components.MarqueeAnimationMode.Companion.WhileFocused
 
 const val DefaultMarqueeIterations: Int = 3
 const val DefaultMarqueeDelayMillis: Int = 1_200
