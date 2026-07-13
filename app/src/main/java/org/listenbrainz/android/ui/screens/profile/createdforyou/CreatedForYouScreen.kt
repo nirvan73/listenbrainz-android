@@ -143,12 +143,7 @@ private fun CreatedForYouScreen(
 ) {
     var selectedPlaylist by remember {
         mutableStateOf<UserPlaylist?>(
-            if (uiState.createdForTabUIState.createdForYouPlaylists.isNullOrEmpty()) null
-            else {
-                uiState.createdForTabUIState.createdForYouPlaylists?.let {
-                    it[0].playlist
-                }
-            }
+            uiState.createdForTabUIState.createdForYouPlaylists?.firstOrNull()?.playlist
         )
     }
     val playlistData =
@@ -162,13 +157,7 @@ private fun CreatedForYouScreen(
 
     LaunchedEffect(isRefreshing) {
         if (selectedPlaylist == null) {
-            selectedPlaylist =
-                if (uiState.createdForTabUIState.createdForYouPlaylists.isNullOrEmpty()) null
-                else {
-                    uiState.createdForTabUIState.createdForYouPlaylists?.let {
-                        it[0].playlist
-                    }
-                }
+            selectedPlaylist = uiState.createdForTabUIState.createdForYouPlaylists?.firstOrNull()?.playlist
         }
     }
 
@@ -272,141 +261,141 @@ private fun CreatedForYouScreen(
                 }
             } else {
                 uiState.createdForTabUIState.createdForYouPlaylists?.let{ createdForYouPlaylists->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    LazyColumn {
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(ListenBrainzTheme.colorScheme.background)
-                                    .padding(bottom = 12.dp)
-                            ) {
-                                Spacer(modifier = Modifier.height(32.dp))
-                                PlaylistSelectionCardRow(
-                                    modifier = Modifier.padding(vertical = 8.dp),
-                                    playlists = createdForYouPlaylists.map { it.playlist },
-                                    selectedPlaylist = selectedPlaylist,
-                                    onPlaylistSelect = {
-                                        selectedPlaylist = it
-                                    },
-                                    onSaveClick = onPlaylistSaveClick
-                                )
-                            }
-                        }
-
-                        item {
-                            Log.e(selectedPlaylist,"initial playlist selected")
-                            AnimatedContent(
-                                selectedPlaylist,
-                                modifier = Modifier
-                                    .background(brush = ListenBrainzTheme.colorScheme.userPageGradient)
-                            ) { playlist ->
-                                if (playlist == null) {
-                                    Box(
-                                        modifier = Modifier
-                                            .fillParentMaxWidth()
-                                            .padding(
-                                                horizontal = ListenBrainzTheme.paddings.horizontal,
-                                                vertical = 40.dp
-                                            ),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Text(
-                                            text = "No playlist selected",
-                                            fontWeight = FontWeight.Medium,
-                                            color = ListenBrainzTheme.colorScheme.onBackground
-                                        )
-                                    }
-                                } else if (playlistData == null) {
-                                    Column(
-                                        modifier = Modifier
-                                            .fillParentMaxWidth()
-                                            .padding(
-                                                horizontal = ListenBrainzTheme.paddings.horizontal,
-                                                vertical = 40.dp
-                                            ),
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Text(
-                                            text = "Playlist data could not be loaded :(",
-                                            fontWeight = FontWeight.Medium,
-                                            color = ListenBrainzTheme.colorScheme.onBackground
-                                        )
-
-                                        VerticalSpacer(8.dp)
-
-                                        RetryButton {
-                                            onRetryDataFetch(playlist)
-                                        }
-                                    }
-                                } else {
-                                    PlaylistHeadingAndDescription(
-                                        title = playlistData.title ?: "No title",
-                                        tracksCount = playlistData.track.size,
-                                        lastUpdatedDate = playlistData.date ?: "No date",
-                                        description = playlistData.annotation
-                                            ?: "No description",
-                                        onPlayAllClick = {
-                                            onPlayAllClick()
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        LazyColumn {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(ListenBrainzTheme.colorScheme.background)
+                                        .padding(bottom = 12.dp)
+                                ) {
+                                    Spacer(modifier = Modifier.height(32.dp))
+                                    PlaylistSelectionCardRow(
+                                        modifier = Modifier.padding(vertical = 8.dp),
+                                        playlists = createdForYouPlaylists.map { it.playlist },
+                                        selectedPlaylist = selectedPlaylist,
+                                        onPlaylistSelect = {
+                                            selectedPlaylist = it
                                         },
-                                        onShareClick = {
-                                            onShareClick(playlist)
+                                        onSaveClick = onPlaylistSaveClick
+                                    )
+                                }
+                            }
+
+                            item {
+                                Log.e(selectedPlaylist,"initial playlist selected")
+                                AnimatedContent(
+                                    selectedPlaylist,
+                                    modifier = Modifier
+                                        .background(brush = ListenBrainzTheme.colorScheme.userPageGradient)
+                                ) { playlist ->
+                                    if (playlist == null) {
+                                        Box(
+                                            modifier = Modifier
+                                                .fillParentMaxWidth()
+                                                .padding(
+                                                    horizontal = ListenBrainzTheme.paddings.horizontal,
+                                                    vertical = 40.dp
+                                                ),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text(
+                                                text = "No playlist selected",
+                                                fontWeight = FontWeight.Medium,
+                                                color = ListenBrainzTheme.colorScheme.onBackground
+                                            )
                                         }
+                                    } else if (playlistData == null) {
+                                        Column(
+                                            modifier = Modifier
+                                                .fillParentMaxWidth()
+                                                .padding(
+                                                    horizontal = ListenBrainzTheme.paddings.horizontal,
+                                                    vertical = 40.dp
+                                                ),
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            Text(
+                                                text = "Playlist data could not be loaded :(",
+                                                fontWeight = FontWeight.Medium,
+                                                color = ListenBrainzTheme.colorScheme.onBackground
+                                            )
+
+                                            VerticalSpacer(8.dp)
+
+                                            RetryButton {
+                                                onRetryDataFetch(playlist)
+                                            }
+                                        }
+                                    } else {
+                                        PlaylistHeadingAndDescription(
+                                            title = playlistData.title ?: "No title",
+                                            tracksCount = playlistData.track.size,
+                                            lastUpdatedDate = playlistData.date ?: "No date",
+                                            description = playlistData.annotation
+                                                ?: "No description",
+                                            onPlayAllClick = {
+                                                onPlayAllClick()
+                                            },
+                                            onShareClick = {
+                                                onShareClick(playlist)
+                                            }
+                                        )
+                                    }
+                                }
+                            }
+
+                            items(playlistData?.track?.size ?: 0) { trackIndex ->
+                                if (playlistData != null) {
+                                    val playlist = playlistData.track[trackIndex]
+                                    ListenCardSmallDefault(
+                                        modifier = Modifier.padding(
+                                            horizontal = ListenBrainzTheme.paddings.horizontal,
+                                            vertical = ListenBrainzTheme.paddings.lazyListAdjacent
+                                        ),
+                                        metadata = playlist.toMetadata(),
+                                        coverArtUrl = getCoverArtUrl(
+                                            caaReleaseMbid = playlist.extension.trackExtensionData.additionalMetadata.caaReleaseMbid,
+                                            caaId = playlist.extension.trackExtensionData.additionalMetadata.caaId
+                                        ),
+                                        onDropdownSuccess = { messsage ->
+                                            snackbarState.showSnackbar(messsage)
+                                        },
+                                        onDropdownError = { error ->
+                                            snackbarState.showSnackbar(error.toast)
+                                        },
+                                        goToArtistPage = goToArtistPage,
+                                        onClick =  {
+                                            onTrackClick(playlist)
+                                        },
+                                        trailingContent = {
+                                            Text(
+                                                modifier = Modifier
+                                                    .padding(bottom = 4.dp),
+                                                text = formatDurationSeconds(
+                                                    playlist.duration?.div(1000) ?: 0
+                                                ),
+                                                style = TextStyle(
+                                                    fontSize = 12.sp,
+                                                    fontWeight = FontWeight.Medium
+                                                ),
+                                                color = ListenBrainzTheme.colorScheme.listenText.copy(
+                                                    alpha = 0.8f
+                                                ),
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis
+                                            )
+                                        },
                                     )
                                 }
                             }
                         }
-
-                        items(playlistData?.track?.size ?: 0) { trackIndex ->
-                            if (playlistData != null) {
-                                val playlist = playlistData.track[trackIndex]
-                                ListenCardSmallDefault(
-                                    modifier = Modifier.padding(
-                                        horizontal = ListenBrainzTheme.paddings.horizontal,
-                                        vertical = ListenBrainzTheme.paddings.lazyListAdjacent
-                                    ),
-                                    metadata = playlist.toMetadata(),
-                                    coverArtUrl = getCoverArtUrl(
-                                        caaReleaseMbid = playlist.extension.trackExtensionData.additionalMetadata.caaReleaseMbid,
-                                        caaId = playlist.extension.trackExtensionData.additionalMetadata.caaId
-                                    ),
-                                    onDropdownSuccess = { messsage ->
-                                        snackbarState.showSnackbar(messsage)
-                                    },
-                                    onDropdownError = { error ->
-                                        snackbarState.showSnackbar(error.toast)
-                                    },
-                                    goToArtistPage = goToArtistPage,
-                                    onClick =  {
-                                        onTrackClick(playlist)
-                                    },
-                                    trailingContent = {
-                                        Text(
-                                            modifier = Modifier
-                                                .padding(bottom = 4.dp),
-                                            text = formatDurationSeconds(
-                                                playlist.duration?.div(1000) ?: 0
-                                            ),
-                                            style = TextStyle(
-                                                fontSize = 12.sp,
-                                                fontWeight = FontWeight.Medium
-                                            ),
-                                            color = ListenBrainzTheme.colorScheme.listenText.copy(
-                                                alpha = 0.8f
-                                            ),
-                                            maxLines = 1,
-                                            overflow = TextOverflow.Ellipsis
-                                        )
-                                    },
-                                )
-                            }
-                        }
                     }
                 }
-                    }
             }
         }
         PullRefreshIndicator(
