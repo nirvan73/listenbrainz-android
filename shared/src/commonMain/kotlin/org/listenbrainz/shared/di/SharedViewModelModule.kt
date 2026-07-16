@@ -20,6 +20,7 @@ import org.listenbrainz.shared.viewmodel.PlaylistDataViewModel
 import org.listenbrainz.shared.viewmodel.SearchViewModel
 import org.listenbrainz.shared.viewmodel.SettingsViewModel
 import org.listenbrainz.shared.viewmodel.SongViewModel
+import org.listenbrainz.shared.viewmodel.UserViewModel
 import org.listenbrainz.shared.viewmodel.SocialViewModel
 
 val sharedViewModelModule = module {
@@ -40,4 +41,5 @@ val sharedViewModelModule = module {
     viewModel { SocialViewModel(get(),get(),get(),get(),get(named(IO_DISPATCHER)),get(named(DEFAULT_DISPATCHER)),get<StringProvider>()) }
     viewModel { FeedViewModel(get(),get(),get(),get(),get(),get(named(IO_DISPATCHER)),get(named(DEFAULT_DISPATCHER))) }
     viewModel { SearchViewModel(get(),get(),get(),get(),get(),get(named(IO_DISPATCHER)),get(named(DEFAULT_DISPATCHER))) }
+    viewModel { UserViewModel(get(),get(),get(),get(),get(),get(named(IO_DISPATCHER))) }
 }
