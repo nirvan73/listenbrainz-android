@@ -7,6 +7,8 @@ import android.content.Intent
 import android.os.Build
 import android.os.StrictMode
 import androidx.work.Configuration
+import dev.brewkits.kmpworkmanager.KmpWorkManager
+import dev.brewkits.kmpworkmanager.generated.AndroidWorkerFactoryGenerated
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -20,11 +22,13 @@ import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
 import org.listenbrainz.android.BuildConfig
 import org.listenbrainz.android.di.appModules
+import org.listenbrainz.android.ui.screens.main.MainActivity
 import org.listenbrainz.shared.repository.AppPreferences
 import org.listenbrainz.android.service.ListenSubmissionService
 import org.listenbrainz.shared.util.Constants
 import org.listenbrainz.android.util.Utils.isServiceRunning
 import org.listenbrainz.shared.util.Log
+import org.listenbrainz.shared.util.NotificationConfig
 
 class App : Application(), Configuration.Provider {
 
@@ -34,6 +38,8 @@ class App : Application(), Configuration.Provider {
     override fun onCreate() {
         context = this
         super.onCreate()
+
+        NotificationConfig.initialize(MainActivity::class)
 
         // Initialize Koin
         ensureKoinStarted(this)
@@ -99,6 +105,10 @@ class App : Application(), Configuration.Provider {
                     workManagerFactory()
                     modules(appModules)
                 }
+                KmpWorkManager.initialize(
+                    context = context.applicationContext,
+                    workerFactory = AndroidWorkerFactoryGenerated()
+                )
             }
         }
 
