@@ -28,7 +28,13 @@ import org.listenbrainz.shared.service.YouTubeApiService
 import org.listenbrainz.shared.util.IosSongsData
 import org.listenbrainz.shared.util.SongsData
 import org.listenbrainz.shared.util.AlbumsData
+import org.listenbrainz.shared.util.ArrayProvider
+import org.listenbrainz.shared.util.DrawableProvider
 import org.listenbrainz.shared.util.IosAlbumsData
+import org.listenbrainz.shared.util.IosNotificationManager
+import org.listenbrainz.shared.util.ListenSubmissionNotification
+import org.listenbrainz.shared.util.PlatformNotificationManager
+import org.listenbrainz.shared.util.StringProvider
 import platform.Foundation.NSFileManager
 
 actual fun platform() = "iOS"
@@ -105,4 +111,16 @@ actual fun provideSongData(): SongsData {
 
 actual fun provideAlbumsData(): AlbumsData {
     return IosAlbumsData()
+}
+
+actual fun provideSharedNotificationManager(
+    drawableProvider: DrawableProvider,
+    stringProvider: StringProvider,
+    arrayProvider: ArrayProvider
+): PlatformNotificationManager {
+
+    return IosNotificationManager(
+        notificationId = ListenSubmissionNotification.NOTIFICATION_ID.toString(),
+        listeningTitle = "♫ Listening now",
+    )
 }

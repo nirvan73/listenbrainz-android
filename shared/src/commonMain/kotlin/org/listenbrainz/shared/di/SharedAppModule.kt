@@ -11,7 +11,9 @@ import org.listenbrainz.shared.provideLogger
 import org.listenbrainz.shared.util.BuildInfo
 import org.listenbrainz.shared.util.LogSubmitter
 import org.listenbrainz.shared.provideAlbumsData
+import org.listenbrainz.shared.provideSharedNotificationManager
 import org.listenbrainz.shared.util.AlbumsData
+import org.listenbrainz.shared.util.PlatformNotificationManager
 
 
 val platformModule = module {
@@ -31,5 +33,8 @@ val platformModule = module {
     }
     single<AlbumsData>{
         provideAlbumsData()
+    }
+    single<PlatformNotificationManager>{
+        provideSharedNotificationManager(get(),get(),get())
     }
 }

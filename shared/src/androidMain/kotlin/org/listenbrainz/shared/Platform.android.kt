@@ -27,6 +27,12 @@ import org.listenbrainz.shared.util.AndroidSongsData
 import org.listenbrainz.shared.util.SongsData
 import org.listenbrainz.shared.util.AlbumsData
 import org.listenbrainz.shared.util.AndroidAlbumsData
+import org.listenbrainz.shared.util.AndroidNotificationManager
+import org.listenbrainz.shared.util.ArrayProvider
+import org.listenbrainz.shared.util.DrawableProvider
+import org.listenbrainz.shared.util.NotificationConfig
+import org.listenbrainz.shared.util.PlatformNotificationManager
+import org.listenbrainz.shared.util.StringProvider
 
 actual fun platform() = "Android"
 
@@ -89,4 +95,19 @@ actual fun provideSongData(): SongsData {
 
 actual fun provideAlbumsData(): AlbumsData {
     return AndroidAlbumsData()
+}
+
+actual fun provideSharedNotificationManager(
+    drawableProvider: DrawableProvider,
+    stringProvider: StringProvider,
+    arrayProvider: ArrayProvider
+): PlatformNotificationManager {
+
+    val targetClass = NotificationConfig.targetActivityClass ?: Class.forName("android.app.Activity")
+    return AndroidNotificationManager(
+        targetActivityClass = targetClass,
+        drawableProvider = drawableProvider,
+        stringProvider = stringProvider,
+        arrayProvider = arrayProvider
+    )
 }

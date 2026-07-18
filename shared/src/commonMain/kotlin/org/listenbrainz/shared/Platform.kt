@@ -15,6 +15,10 @@ import org.listenbrainz.shared.service.UserService
 import org.listenbrainz.shared.service.YouTubeApiService
 import org.listenbrainz.shared.util.SongsData
 import org.listenbrainz.shared.util.AlbumsData
+import org.listenbrainz.shared.util.ArrayProvider
+import org.listenbrainz.shared.util.DrawableProvider
+import org.listenbrainz.shared.util.PlatformNotificationManager
+import org.listenbrainz.shared.util.StringProvider
 
 expect fun platform(): String
 
@@ -44,3 +48,9 @@ expect fun getListensSubmissionDatabase(): RoomDatabase.Builder<ListensSubmissio
 expect fun provideSongData(): SongsData
 
 expect fun provideAlbumsData(): AlbumsData
+
+expect fun provideSharedNotificationManager(
+    drawableProvider: DrawableProvider,
+    stringProvider: StringProvider,
+    arrayProvider: ArrayProvider
+): PlatformNotificationManager
