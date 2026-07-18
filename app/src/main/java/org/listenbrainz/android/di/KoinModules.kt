@@ -212,8 +212,6 @@ val appModule = module {
 
     single<AppPreferences> { AppPreferencesImpl(androidContext()) }
 
-    single<WorkManager> { WorkManager.getInstance(androidContext()) }
-
     single<BackgroundTaskScheduler> {
         KmpWorkManager.getInstance().backgroundTaskScheduler
     }
