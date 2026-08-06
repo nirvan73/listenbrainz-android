@@ -45,6 +45,7 @@ import org.listenbrainz.shared.util.StringResource
 import org.listenbrainz.shared.util.Utils
 import org.listenbrainz.shared.util.Utils.isValidMbidFormat
 import org.listenbrainz.shared.viewmodel.BaseViewModel
+import kotlin.time.Duration.Companion.milliseconds
 
 class PlaylistDataViewModel(
     val appPreferences: AppPreferences,
@@ -54,17 +55,29 @@ class PlaylistDataViewModel(
     private val defaultDispatcher: CoroutineDispatcher,
     private val stringProvider: StringProvider
 ) : BaseViewModel<PlaylistDataUIState>() {
-    private var username: String? = null
+    private val username = appPreferences
+        .username
+        .getFlow()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = null
+        )
+
     private val userInputQueryFlow = MutableStateFlow("")
 
     @OptIn(FlowPreview::class)
-    private val userQueryFlow =
-        userInputQueryFlow.asStateFlow().debounce(500).distinctUntilChanged()
+    private val userQueryFlow = userInputQueryFlow
+        .asStateFlow()
+            .debounce(500.milliseconds)
+            .distinctUntilChanged()
     private val recordingInputQueryFlow = MutableStateFlow("")
 
     @OptIn(FlowPreview::class)
-    private val recordingQueryFlow =
-        recordingInputQueryFlow.asStateFlow().debounce(500).distinctUntilChanged()
+    private val recordingQueryFlow = recordingInputQueryFlow
+        .asStateFlow()
+            .debounce(500.milliseconds)
+            .distinctUntilChanged()
     private val userListFlow = MutableStateFlow<List<User>>(emptyList())
     private val playlistData = MutableStateFlow<Map<String, PlaylistData>>(emptyMap())
 
@@ -80,7 +93,6 @@ class PlaylistDataViewModel(
 
     init {
         viewModelScope.launch(ioDispatcher) {
-            username = appPreferences.username.get()
             recordingQueryFlow.collectLatest { title ->
                 if (title.isEmpty()) {
                     playlistScreenUIStateFlow.emit(
@@ -127,7 +139,6 @@ class PlaylistDataViewModel(
     fun getDataInPlaylistScreen(mbid: String?, isRefresh: Boolean = false) {
         var playlist = PlaylistData()
         viewModelScope.launch(ioDispatcher) {
-            username = appPreferences.username.get()
             if (isRefresh)
                 playlistScreenUIStateFlow.emit(playlistScreenUIStateFlow.value.copy(isRefreshing = true))
             else
@@ -141,8 +152,8 @@ class PlaylistDataViewModel(
                         isLoading = false,
                         playlistMBID = mbid,
                         isRefreshing = false,
-                        isUserPlaylistOwner = username == playlist.creator || playlist.extension.playlistExtensionData.collaborators.contains(
-                            username
+                        isUserPlaylistOwner = username.value == playlist.creator || playlist.extension.playlistExtensionData.collaborators.contains(
+                            username.value
                         )
                     )
                 )
@@ -163,8 +174,8 @@ class PlaylistDataViewModel(
                             isLoading = false,
                             playlistMBID = mbid,
                             isRefreshing = false,
-                            isUserPlaylistOwner = username == playlist.creator || playlist.extension.playlistExtensionData.collaborators.contains(
-                                username
+                            isUserPlaylistOwner = username.value == playlist.creator || playlist.extension.playlistExtensionData.collaborators.contains(
+                                username.value
                             )
                         )
                     )
@@ -176,7 +187,6 @@ class PlaylistDataViewModel(
     fun getInitialDataInCreatePlaylistScreen(mbid: String?) {
         var playlist = PlaylistData()
         viewModelScope.launch(ioDispatcher) {
-            username = appPreferences.username.get()
             if (mbid == null) {
                 createEditScreenUIStateFlow.emit(CreateEditScreenUIState(isLoading = false))
                 return@launch
@@ -261,7 +271,7 @@ class PlaylistDataViewModel(
                     name = name ?: createEditScreenUIStateFlow.value.name,
                     description = description ?: createEditScreenUIStateFlow.value.description,
                     isPublic = isPublic ?: createEditScreenUIStateFlow.value.isPublic,
-                    collaboratorSelected = collaborators?.distinct()?.filter { it != username }
+                    collaboratorSelected = collaborators?.distinct()?.filter { it != username.value }
                         ?: createEditScreenUIStateFlow.value.collaboratorSelected,
                     emptyTitleFieldError = false
                 )
@@ -618,7 +628,7 @@ class PlaylistDataViewModel(
         )
     ){
         UserPlaylistPagingSource(
-            username = username,
+            usernameProvider = { username.value },
             onError = {
                 emitError(it)
             },
@@ -635,12 +645,11 @@ class PlaylistDataViewModel(
         )
     ){
         CollabPlaylistPagingSource(
-            username = username,
+            usernameProvider = { username.value },
             onError = { emitError(it) },
             playlistDataRepository = repository,
             ioDispatcher = ioDispatcher
         )
-
     }
         .flow
         .cachedIn(viewModelScope)

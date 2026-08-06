@@ -141,21 +141,21 @@ class UserViewModel(
 
     private fun createNewUserListensPagingSource() =
         UserListensPagingSource(
-            username = currentUser.value,
+            usernameProvider = { currentUser.value },
             onError = { error -> emitError(error) },
             ioDispatcher = ioDispatcher,
             listensRepository = listensRepository,
         )
 
     private fun createNewUserPlaylistPagingSource() = UserPlaylistPagingSource(
-        username = currentUser.value,
+        usernameProvider = { currentUser.value },
         onError = { error -> emitError(error) },
         ioDispatcher = ioDispatcher,
         playlistRepository = playlistDataRepository
     )
 
     private fun createNewCollabPlaylistPagingSource() = CollabPlaylistPagingSource(
-        username = currentUser.value,
+        usernameProvider = { currentUser.value },
         onError = { error -> emitError(error) },
         ioDispatcher = ioDispatcher,
         playlistDataRepository = playlistDataRepository

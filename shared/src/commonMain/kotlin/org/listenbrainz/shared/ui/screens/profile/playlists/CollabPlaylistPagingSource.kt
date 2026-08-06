@@ -10,7 +10,7 @@ import org.listenbrainz.shared.repository.playlists.PlaylistDataRepository
 import org.listenbrainz.shared.util.Resource
 
 class CollabPlaylistPagingSource(
-    private val username: String?,
+    private val usernameProvider: suspend () -> String?,
     private val onError: (error: ResponseError?) -> Unit,
     private val playlistDataRepository: PlaylistDataRepository,
     private val ioDispatcher: CoroutineDispatcher
@@ -23,6 +23,7 @@ class CollabPlaylistPagingSource(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UserPlaylist> {
+        val username = usernameProvider()
         if (username.isNullOrEmpty()) {
             val error = ResponseError.BadRequest(
                 actualResponse = "Some error occurred! Username not found"
