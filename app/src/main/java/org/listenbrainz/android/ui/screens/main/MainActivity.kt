@@ -37,10 +37,8 @@ import org.listenbrainz.android.ui.screens.appupdates.InstallAppDialog
 import org.listenbrainz.android.ui.screens.appupdates.InstallPermissionRationaleDialog
 import org.listenbrainz.android.ui.screens.appupdates.PlayStoreUpdateAvailableDialog
 import org.listenbrainz.android.ui.screens.appupdates.PlayStoreUpdateReadyDialog
-import org.listenbrainz.android.ui.screens.onboarding.auth.login.ConsentScreenDataInitializer
-import org.listenbrainz.android.ui.screens.onboarding.auth.login.ListenBrainzLogin
-import org.listenbrainz.android.ui.screens.onboarding.auth.login.LoginConsentScreen
 import org.listenbrainz.android.ui.screens.onboarding.auth.createaccount.ListenBrainzCreateAccountScreen
+import org.listenbrainz.android.ui.screens.onboarding.auth.templogin.TempLoginScreen
 import org.listenbrainz.android.ui.screens.onboarding.introduction.IntroductionScreens
 import org.listenbrainz.android.ui.screens.onboarding.listeningApps.ListeningAppSelectionScreen
 import org.listenbrainz.android.ui.screens.onboarding.permissions.PermissionScreen
@@ -88,7 +86,7 @@ class MainActivity : ComponentActivity() {
                     )
                 SetStatusAndNavigationBarTheme(backStack)
                 OnboardingScreenBackground(backStack)
-                ConsentScreenDataInitializer(dashBoardViewModel)
+//                ConsentScreenDataInitializer(dashBoardViewModel)
                 NavDisplay(
                     backStack = backStack,
                     onBack = {
@@ -104,47 +102,20 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
-                        entry<NavigationItem.OnboardingScreens.LoginConsentScreen> {
+                        entry<NavigationItem.OnboardingScreens.TempLoginScreen> {
                             LaunchedEffect(Unit) {
                                 dashBoardViewModel.appPreferences.getLoginStatusFlow()
                                     .collectLatest {
                                         if (dashBoardViewModel.appPreferences.isUserLoggedIn()) {
-                                            onboardingScreensQueue.remove(NavigationItem.OnboardingScreens.LoginScreen)
-                                            onboardingScreensQueue.remove(NavigationItem.OnboardingScreens.LoginConsentScreen)
-                                            backStack.remove(NavigationItem.OnboardingScreens.LoginScreen)
-                                            backStack.remove(NavigationItem.OnboardingScreens.LoginConsentScreen)
+                                            onboardingScreensQueue.remove(NavigationItem.OnboardingScreens.TempLoginScreen)
+                                            backStack.remove(NavigationItem.OnboardingScreens.TempLoginScreen)
                                             onNavigateInOnboarding(backStack, dashBoardViewModel)
                                         }
                                     }
                             }
-                            LoginConsentScreen(
-                                dashBoardViewModel
-                            ) {
-                                onNavigateInOnboarding(
-                                    backStack,
-                                    dashBoardViewModel
-                                )
-                            }
-                        }
-                        entry<NavigationItem.OnboardingScreens.LoginScreen> {
-                            LaunchedEffect(Unit) {
-                                dashBoardViewModel.appPreferences.getLoginStatusFlow()
-                                    .collectLatest {
-                                        if (dashBoardViewModel.appPreferences.isUserLoggedIn()) {
-                                            onboardingScreensQueue.remove(NavigationItem.OnboardingScreens.LoginScreen)
-                                            onboardingScreensQueue.remove(NavigationItem.OnboardingScreens.LoginConsentScreen)
-                                            backStack.remove(NavigationItem.OnboardingScreens.LoginScreen)
-                                            backStack.remove(NavigationItem.OnboardingScreens.LoginConsentScreen)
-                                            onNavigateInOnboarding(backStack, dashBoardViewModel)
-                                        }
-                                    }
-                            }
-                            ListenBrainzLogin(onLoginFinished = {
+                            TempLoginScreen(onLoginFinished = {
                                 //Handled above in LaunchedEffect
-                            },
-                                onCreateAccountClicked = {
-                                    backStack.add(NavigationItem.CreateAccountScreen)
-                                })
+                            })
                         }
                         entry<NavigationItem.OnboardingScreens.PermissionScreen> {
                             PermissionScreen(
@@ -174,7 +145,7 @@ class MainActivity : ComponentActivity() {
                             HomeScreen(
                                 settingsCallbacks = SettingsCallbacksToHomeScreen(
                                     onLoginRequest = {
-                                        backStack.add(NavigationItem.OnboardingScreens.LoginScreen)
+                                        backStack.add(NavigationItem.OnboardingScreens.TempLoginScreen)
                                     },
                                     onOnboardingRequest = {
                                         dashBoardViewModel.resetOnboardingCompleted()
@@ -258,19 +229,16 @@ class MainActivity : ComponentActivity() {
                 onboardingScreensQueue.addAll(
                     listOf(
                         NavigationItem.OnboardingScreens.IntroductionScreen,
-                        NavigationItem.OnboardingScreens.LoginConsentScreen,
-                        NavigationItem.OnboardingScreens.LoginScreen,
+                        NavigationItem.OnboardingScreens.TempLoginScreen,
                         NavigationItem.OnboardingScreens.PermissionScreen,
                         NavigationItem.OnboardingScreens.ListeningAppScreen
                     )
                 )
             }
             if (dashBoardViewModel.appPreferences.isUserLoggedIn()) {
-                onboardingScreensQueue.remove(NavigationItem.OnboardingScreens.LoginConsentScreen)
-                onboardingScreensQueue.remove(NavigationItem.OnboardingScreens.LoginScreen)
-            } else {
-                onboardingScreensQueue.add(NavigationItem.OnboardingScreens.LoginConsentScreen)
-                onboardingScreensQueue.add(NavigationItem.OnboardingScreens.LoginScreen)
+                onboardingScreensQueue.remove(NavigationItem.OnboardingScreens.TempLoginScreen)
+            } else if (!onboardingScreensQueue.contains(NavigationItem.OnboardingScreens.TempLoginScreen)) {
+                onboardingScreensQueue.add(NavigationItem.OnboardingScreens.TempLoginScreen)
             }
 
             if (dashBoardViewModel.permissionStatusFlow.first()
@@ -310,9 +278,7 @@ class MainActivity : ComponentActivity() {
         } else {
             runBlocking {
                 val isUserLoggedIn = dashBoardViewModel.appPreferences.isUserLoggedIn()
-                if (!isUserLoggedIn && (key == NavigationItem.OnboardingScreens.LoginConsentScreen ||
-                            key == NavigationItem.OnboardingScreens.LoginScreen)
-                ) {
+                if (!isUserLoggedIn && key == NavigationItem.OnboardingScreens.TempLoginScreen) {
                     onboardingScreensQueue.add(0, key)
                 }
             }

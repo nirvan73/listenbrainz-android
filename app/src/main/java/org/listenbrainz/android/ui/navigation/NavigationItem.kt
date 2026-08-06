@@ -18,6 +18,10 @@ sealed interface NavigationItem :NavKey{
         @Serializable
         data object LoginScreen : OnboardingScreens
 
+        /* Temporary token based login */
+        @Serializable
+        data object TempLoginScreen : OnboardingScreens
+
         @Serializable
         data object ListeningAppScreen : OnboardingScreens
     }
