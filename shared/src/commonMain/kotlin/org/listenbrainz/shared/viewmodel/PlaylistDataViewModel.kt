@@ -618,7 +618,7 @@ class PlaylistDataViewModel(
         )
     ){
         UserPlaylistPagingSource(
-            username = username,
+            usernameProvider = { username },
             onError = {
                 emitError(it)
             },
@@ -635,12 +635,11 @@ class PlaylistDataViewModel(
         )
     ){
         CollabPlaylistPagingSource(
-            username = username,
+            usernameProvider = { username },
             onError = { emitError(it) },
             playlistDataRepository = repository,
             ioDispatcher = ioDispatcher
         )
-
     }
         .flow
         .cachedIn(viewModelScope)

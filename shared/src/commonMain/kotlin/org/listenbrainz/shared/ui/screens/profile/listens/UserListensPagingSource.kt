@@ -11,17 +11,18 @@ import org.listenbrainz.shared.util.Resource
 import kotlin.time.Clock
 
 class UserListensPagingSource(
-    private val username: String?,
+    private val usernameProvider: suspend () -> String?,
     private val onError: (error: ResponseError?) -> Unit,
     private val listensRepository: ListensRepository,
     private val ioDispatcher: CoroutineDispatcher,
 ) : PagingSource<Long, Listen>() {
 
-    override fun getRefreshKey(state: PagingState<Long, Listen>): Long? {
+    override fun getRefreshKey(state: PagingState<Long, Listen>): Long {
         return Clock.System.now().epochSeconds
     }
 
     override suspend fun load(params: LoadParams<Long>): LoadResult<Long, Listen> {
+        val username = usernameProvider()
         if (username.isNullOrEmpty()) {
             val error = ResponseError.BadRequest(
                 actualResponse = "Some error occurred! Username not found"
