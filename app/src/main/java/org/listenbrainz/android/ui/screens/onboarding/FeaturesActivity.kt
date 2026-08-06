@@ -37,27 +37,13 @@ class FeaturesActivity : OnboardAdvanced() {
         setStatusBarColorRes(R.color.app_bg)
         setNavBarColorRes(R.color.app_bg)
 
-        askForPermissions(
-            when {
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE -> arrayOf(
-                    Manifest.permission.POST_NOTIFICATIONS,
-                    Manifest.permission.READ_MEDIA_AUDIO,
-                )
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> arrayOf(
-                    Manifest.permission.POST_NOTIFICATIONS,
-                    Manifest.permission.READ_MEDIA_AUDIO,
-                )
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> arrayOf(
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                )
-                else -> arrayOf(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
-            },
-            slideNumber = 1,
-            required = true
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            askForPermissions(
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                slideNumber = 1,
+                required = false
+            )
+        }
 
         addSlides()
 
@@ -68,7 +54,6 @@ class FeaturesActivity : OnboardAdvanced() {
         val slides = listOf(
             SlideData("Listens", "Track your music listening habits", R.raw.teen),
             SlideData("Critiques", "Read and write about an album or event", R.raw.review),
-            SlideData("BrainzPlayer", "Listen to locally saved music", R.raw.music_player)
         )
 
         slides.forEach { slide ->
@@ -96,7 +81,8 @@ class FeaturesActivity : OnboardAdvanced() {
 
     override fun onNextPressed(currentFragment: Fragment?) {
         if (!featuresViewModel.isNotificationServiceAllowed()) {
-            Toast.makeText(this, "Allow notification access to submit listens", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Allow notification access to submit listens", Toast.LENGTH_SHORT)
+                .show()
             val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
             startActivity(intent)
         } else {

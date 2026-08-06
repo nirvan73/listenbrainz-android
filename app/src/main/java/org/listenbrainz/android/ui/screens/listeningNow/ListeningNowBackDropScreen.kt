@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import org.koin.androidx.compose.koinViewModel
 import org.listenbrainz.android.ui.theme.ListenBrainzTheme
 import org.listenbrainz.shared.viewmodel.ListeningNowViewModel
 import kotlin.math.max
@@ -49,7 +50,7 @@ private fun BackdropScaffoldState.offsetOrZero(): Float =
 fun ListeningNowBackDropScreen(
     modifier: Modifier = Modifier,
     backdropScaffoldState: BackdropScaffoldState,
-    listeningNowViewModel: ListeningNowViewModel = viewModel(),
+    listeningNowViewModel: ListeningNowViewModel = koinViewModel(),
     paddingValues: PaddingValues,
     isLandscape: Boolean = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE,
     backLayerContent: @Composable () -> Unit
@@ -60,15 +61,18 @@ fun ListeningNowBackDropScreen(
     val defaultBackgroundColor = ListenBrainzTheme.colorScheme.background
     val listeningNowUIState by listeningNowViewModel.listeningNowUIState.collectAsState()
 
-    val isListeningNow = remember(listeningNowUIState) {
-        listeningNowUIState.song != null && listeningNowUIState.song?.trackMetadata?.trackName?.isNotEmpty() == true
-    }
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(listeningNowUIState.song) {
+        if(!listeningNowUIState.isListeningNow && backdropScaffoldState.isConcealed){
+            backdropScaffoldState.reveal()
+        }
+    }
 
     /** 56.dp is default bottom navigation height */
     val headerHeight by animateDpAsState(
         targetValue = if (isLandscape) 0.dp else
-            if (!isListeningNow)
+            if (!listeningNowUIState.isListeningNow)
                 56.dp
             else
                 56.dp + ListenBrainzTheme.sizes.brainzPlayerPeekHeight
@@ -151,7 +155,7 @@ fun ListeningNowBackDropScreen(
 @OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
-fun BrainzPlayerBackDropScreenPreview() {
+fun ListeningNowBackDropScreenPreview() {
     ListeningNowBackDropScreen(
         backdropScaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed),
         paddingValues = PaddingValues(0.dp)

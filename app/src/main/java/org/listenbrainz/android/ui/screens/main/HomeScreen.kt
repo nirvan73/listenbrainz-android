@@ -100,7 +100,6 @@ fun HomeScreen(
     }
 
     val isListeningNowOpenedInConcealedState = backdropScaffoldState.targetValue != BackdropValue.Revealed && listeningNowUIState.isListeningNow
-    val isAudioPermissionGranted = permissions[PermissionEnum.ACCESS_MUSIC_AUDIO] == PermissionStatus.GRANTED || !PermissionEnum.ACCESS_MUSIC_AUDIO.isPermissionApplicable()
 
     val topBarActions = TopBarActions(
         popBackStackInSettingsScreen = {
@@ -121,10 +120,7 @@ fun HomeScreen(
     )
     val navOrder = dashboardUiState.navBarOrder
 
-    val filteredNavItems = navOrder?.filter {
-        isAudioPermissionGranted
-    }
-    val startRoute = filteredNavItems?.firstOrNull()?.route
+    val startRoute = navOrder?.firstOrNull()?.route
 
     Scaffold(
         modifier = Modifier
@@ -145,7 +141,7 @@ fun HomeScreen(
                 if (!isLandScape) {
                     AdaptiveNavigationBar(
                         navController = navController,
-                        items = filteredNavItems,
+                        items = navOrder,
                         backdropScaffoldState = backdropScaffoldState,
                         scrollToTop = { scrollToTopState = true },
                         username = username,
@@ -176,7 +172,7 @@ fun HomeScreen(
             if (isLandScape) {
                 AdaptiveNavigationBar(
                     navController = navController,
-                    items = filteredNavItems,
+                    items = navOrder,
                     backdropScaffoldState = backdropScaffoldState,
                     scrollToTop = { scrollToTopState = true },
                     username = username,
@@ -185,7 +181,7 @@ fun HomeScreen(
                 )
             }
 //            if (isGrantedPerms == PermissionStatus.GRANTED.name) {
-            if (startRoute != null && filteredNavItems != null) {
+            if (startRoute != null && navOrder != null) {
                 ListeningNowBackDropScreen(
                     modifier = Modifier.then(if (!isLandScape && !isListeningNowOpenedInConcealedState) Modifier.navigationBarsPadding() else Modifier),
                     backdropScaffoldState = backdropScaffoldState,
@@ -217,17 +213,15 @@ fun HomeScreen(
 
     }
     if (showNavReorderOverlay && navOrder != null) {
-        navOrder?.let { items ->
-            NavBarReorderOverlay(
-                items = items,
-                isLandscape = isLandScape,
-                onDismiss = { newOrder ->
-                    scope.launch {
-                        dashBoardViewModel.appPreferences.navBarOrder.set(newOrder)
-                        showNavReorderOverlay = false
-                    }
+        NavBarReorderOverlay(
+            items = navOrder,
+            isLandscape = isLandScape,
+            onDismiss = { newOrder ->
+                scope.launch {
+                    dashBoardViewModel.appPreferences.navBarOrder.set(newOrder)
+                    showNavReorderOverlay = false
                 }
-            )
-        }
+            }
+        )
     }
 }

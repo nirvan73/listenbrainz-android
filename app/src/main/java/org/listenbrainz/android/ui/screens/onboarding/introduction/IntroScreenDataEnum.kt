@@ -20,18 +20,11 @@ enum class IntroScreenDataEnum(val title: String,
         screenNo = 1,
         res = R.drawable.intro_headphones
     ),
-    BRAINZPLAYER(
-        title = "Enjoy your local music with BrainzPlayer",
-        highlight = null,
-        subtitle = "Play songs from your device effortlessly. Experience a smooth, organized, and enriched music playback experience.",
-        screenNo = 2,
-        res = R.drawable.intro_speakers
-    ),
     BUGS(
         title = "Facing any Issue? \nSubmit Logs!",
         highlight = "Settings > Report an issue",
         subtitle = "If you face any issues, you can submit logs to help us troubleshoot. Go to ",
-        screenNo = 3,
+        screenNo = 2,
         res = R.drawable.intro_bug_report
     );
 

@@ -22,7 +22,6 @@ room = "2.7.2"
 sqlite = "2.6.2"
 accompanist = "0.36.0"
 work = "2.11.1"
-exoplayer = "2.19.1"
 paging = "3.3.5"
 androidGradlePlugin = "8.13.2"
 ksp = "2.3.0"
@@ -141,10 +140,6 @@ app-update = { module = "com.google.android.play:app-update", version.ref = "app
 app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "appUpdateKtx" }
 google-accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 google-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
-
-google-exoplayer-core = { module = "com.google.android.exoplayer:exoplayer-core", version.ref = "exoplayer" }
-google-exoplayer-ui = { module = "com.google.android.exoplayer:exoplayer-ui", version.ref = "exoplayer" }
-google-exoplayer-mediasession = { module = "com.google.android.exoplayer:extension-mediasession", version.ref = "exoplayer" }
 
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }

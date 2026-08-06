@@ -35,25 +35,6 @@ enum class PermissionEnum(
         minSdk = 33
     ),
 
-    ACCESS_MUSIC_AUDIO(
-        permission = Manifest.permission.READ_MEDIA_AUDIO,
-        title = "Access Music & Audio Files",
-        permanentlyDeclinedRationale = "Without access, BrainzPlayer can't play your local music stored on the device.",
-        rationaleText = "Required to play, browse, and manage your local audio files in BrainzPlayer seamlessly.",
-        image = R.drawable.ic_audio_file,
-        minSdk = 33
-    ),
-
-    READ_EXTERNAL_STORAGE(
-        permission = Manifest.permission.READ_EXTERNAL_STORAGE,
-        title = "Read External Storage",
-        permanentlyDeclinedRationale = "This permission is needed to access and play your local music files.",
-        rationaleText = "Lets BrainzPlayer read your stored music for browsing and playback within the app.",
-        image = R.drawable.ic_storage,
-        minSdk = 23,
-        maxSdk = 32
-    ),
-
     READ_NOTIFICATIONS(
         permission = "android.permission.BIND_NOTIFICATION_LISTENER_SERVICE",
         title = "Read Notifications",
@@ -70,17 +51,6 @@ enum class PermissionEnum(
         rationaleText = "Disabling optimization ensures listens are submitted in the background without interruptions.",
         image = R.drawable.ic_battery,
         minSdk = 23
-    ),
-
-    WRITE_EXTERNAL_STORAGE(
-        permission = Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        title = "Write External Storage",
-        permanentlyDeclinedRationale = "Required to manage and access your saved music files.",
-        rationaleText = "Needed to store, organize, and play music files from your device.",
-        image = R.drawable.ic_storage,
-        minSdk = 23,
-        //Maximum sdk update to 28, as scoped storage replaces it from API 29, even though not strictly in API 29
-        maxSdk = 28
     );
 
     //This function checks if the permission is applicable for the current Android version
@@ -98,7 +68,7 @@ enum class PermissionEnum(
     fun isPermissionPermanentlyDeclined(activity: Activity, permissionsRequestedOnce: List<String>): Boolean{
         if(!isPermissionApplicable()) return false
         return when(this){
-            SEND_NOTIFICATIONS, ACCESS_MUSIC_AUDIO, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE ->{
+            SEND_NOTIFICATIONS ->{
                 if(permissionsRequestedOnce.contains(permission) && Build.VERSION_CODES.M <= Build.VERSION.SDK_INT)
                     //If the permission was requested once, then we can check if it is permanently declined
                   !activity.shouldShowRequestPermissionRationale(permission) && ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED
@@ -113,7 +83,7 @@ enum class PermissionEnum(
     fun isGranted(context: Context): Boolean {
         if(!isPermissionApplicable()) return true
         return when(this){
-            SEND_NOTIFICATIONS, ACCESS_MUSIC_AUDIO, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE ->
+            SEND_NOTIFICATIONS ->
                 //Normal way of checking permissions
                 ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
             READ_NOTIFICATIONS->{
@@ -134,7 +104,7 @@ enum class PermissionEnum(
         if(!isPermissionApplicable()) return
 
         when(this){
-            SEND_NOTIFICATIONS, ACCESS_MUSIC_AUDIO, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE ->{
+            SEND_NOTIFICATIONS ->{
                 if(isPermissionPermanentlyDeclined(activity, permissionsRequestedOnce)){
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                         data = "package:${activity.packageName}".toUri()

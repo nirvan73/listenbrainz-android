@@ -11,17 +11,10 @@ import kotlinx.datetime.format.Padding
 import kotlinx.datetime.format.char
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.json.Json
-import org.listenbrainz.shared.model.Playable
 
 object TypeConverter {
 
     private val json = Json { ignoreUnknownKeys = true }
-
-    fun playableToJSON(playable: Playable): String = json.encodeToString(playable)
-
-    fun playableFromJSON(playableJSON: String): Playable {
-        return json.decodeFromString(playableJSON)
-    }
 
     @androidx.room.TypeConverter
     fun nullableListToJSON(list: List<String>?): String = json.encodeToString(list)

@@ -205,11 +205,6 @@ dependencies {
     implementation(libs.google.accompanist.permissions)
     implementation(libs.google.accompanist.systemuicontroller)
 
-    // Media playback
-    implementation(libs.google.exoplayer.core)
-    implementation(libs.google.exoplayer.ui)
-    implementation(libs.google.exoplayer.mediasession)
-
     // Google Play Core for in-app updates
     implementation(libs.app.update)
     implementation(libs.app.update.ktx)

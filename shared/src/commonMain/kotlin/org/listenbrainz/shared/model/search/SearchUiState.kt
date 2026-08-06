@@ -6,7 +6,6 @@ import org.listenbrainz.shared.model.search.albumSearch.AlbumSearchUiState
 import org.listenbrainz.shared.model.search.artistSearch.ArtistSearchUiState
 import org.listenbrainz.shared.model.search.playlistSearch.PlayListSearchUiState
 import org.listenbrainz.shared.model.search.trackSearch.TrackSearchUiState
-import org.listenbrainz.shared.model.Song
 
 data class SearchUiState(
     val selectedSearchType: SearchType = SearchType.USER,
@@ -21,5 +20,4 @@ sealed interface SearchData {
     data class Artists(val data: ArtistSearchUiState) : SearchData
     data class Albums(val data : AlbumSearchUiState):SearchData
     data class Tracks(val data : TrackSearchUiState): SearchData
-    data class Songs(val data: List<Song>) : SearchData
 }

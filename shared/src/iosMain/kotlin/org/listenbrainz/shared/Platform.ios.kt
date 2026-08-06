@@ -25,10 +25,6 @@ import org.listenbrainz.shared.repository.remoteplayer.RemotePlaybackHandler
 import org.listenbrainz.shared.service.ListensService
 import org.listenbrainz.shared.service.UserService
 import org.listenbrainz.shared.service.YouTubeApiService
-import org.listenbrainz.shared.util.IosSongsData
-import org.listenbrainz.shared.util.SongsData
-import org.listenbrainz.shared.util.AlbumsData
-import org.listenbrainz.shared.util.IosAlbumsData
 import platform.Foundation.NSFileManager
 
 actual fun platform() = "iOS"
@@ -97,12 +93,4 @@ actual fun getListensSubmissionDatabase(): RoomDatabase.Builder<ListensSubmissio
     return Room.databaseBuilder<ListensSubmissionDatabase>(
         name = listensDB
     )
-}
-
-actual fun provideSongData(): SongsData {
-    return IosSongsData()
-}
-
-actual fun provideAlbumsData(): AlbumsData {
-    return IosAlbumsData()
 }
