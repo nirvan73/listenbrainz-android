@@ -63,7 +63,6 @@ fun HomeScreen(
     settingsCallbacks: SettingsCallbacksToHomeScreen
 ) {
     val dashboardUiState by dashBoardViewModel.uiState.collectAsStateWithLifecycle()
-    val permissions by dashBoardViewModel.permissionStatusFlow.collectAsState()
     val navController = rememberNavController()
     val backdropScaffoldState =
         rememberBackdropScaffoldState(initialValue = BackdropValue.Revealed)
@@ -76,28 +75,7 @@ fun HomeScreen(
     var showNavReorderOverlay by rememberSaveable { mutableStateOf(false) }
     val isLandScape =
         LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val isBackdropInitialised by remember {
-        derivedStateOf {
-            val currentOffset = runCatching {
-                backdropScaffoldState.requireOffset()
-            }.getOrNull()
-
-            currentOffset != null
-        }
-    }
     val listeningNowUIState by listeningNowViewModel.listeningNowUIState.collectAsStateWithLifecycle()
-
-    var maxOffset by remember {
-        mutableFloatStateOf(0f)
-    }
-
-    val playerHeight = ListenBrainzTheme.sizes.brainzPlayerPeekHeight.toPx()
-    LaunchedEffect(isBackdropInitialised) {
-        if (isBackdropInitialised) {
-            maxOffset =
-                maxOf(maxOffset, backdropScaffoldState.requireOffset() - playerHeight)
-        }
-    }
 
     val isListeningNowOpenedInConcealedState = backdropScaffoldState.targetValue != BackdropValue.Revealed && listeningNowUIState.isListeningNow
 

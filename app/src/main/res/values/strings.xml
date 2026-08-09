@@ -214,9 +214,6 @@
     <!-- News Brainz Acitivity -->
     <string name="title_activity_news_brainz">NewsBrainzActivity</string>
 
-    <!-- BrainzPlayer -->
-    <string name="bp_loading_text">Loading your music library</string>
-
     <!-- Test Tags -->
     <!-- Yim test tags-->
     <string name="tt_yim_home_logo" translatable="false">tt_yim_home_logo</string>

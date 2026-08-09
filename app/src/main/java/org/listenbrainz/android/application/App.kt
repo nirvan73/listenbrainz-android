@@ -1,6 +1,7 @@
 package org.listenbrainz.android.application
 
 import android.app.Application
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -42,10 +43,23 @@ class App : Application(), Configuration.Provider {
         }
 
         GlobalScope.launch {
+            deleteBrainzPlayerDatabaseIfExists()
             startListenService(appPreferences)
         }
     }
 
+    private fun deleteBrainzPlayerDatabaseIfExists(){
+        val dbName = "brainzplayer_database"
+        val dbFile = context.getDatabasePath(dbName)
+        if(dbFile.exists()){
+            context.deleteDatabase(dbName)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+            notificationManager?.deleteNotificationChannel("Music")
+        }
+    }
 
 
     private fun enableStrictMode() {

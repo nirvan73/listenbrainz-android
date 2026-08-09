@@ -17,7 +17,7 @@ class HeaderInterceptor (
         var request: Request = chain.request()
         
         return runBlocking {
-            if (request.headers("Authorization").isNullOrEmpty()) {
+            if (request.header("Authorization").isNullOrEmpty()) {
                 runCatching {
                     withTimeout(3000) {
                         val accessToken = appPreferences.lbAccessToken.get()
