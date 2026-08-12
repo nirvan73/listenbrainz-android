@@ -79,30 +79,32 @@ data class ColorScheme(
 )
 
 
-private val brainzPlayerLightGradientsBrush = Brush.linearGradient(
-    start = Offset.Zero,
-    end = Offset(0f, Float.POSITIVE_INFINITY),
-    colors = listOf(
-        Color(0xFFF5F5F5),
-        Color(0xFFF7F7F7),
-        Color(0xFFF9F9F9),
-        Color(0xFFFBFBFB),
-        Color(0xFFFDFDFD)
+private val frontLayerLightGradientsBrush: Brush
+    get() = Brush.linearGradient(
+        start = Offset.Zero,
+        end = Offset(0f, Float.POSITIVE_INFINITY),
+        colors = listOf(
+            Color(0xFFF5F5F5),
+            Color(0xFFF7F7F7),
+            Color(0xFFF9F9F9),
+            Color(0xFFFBFBFB),
+            Color(0xFFFDFDFD)
+        )
     )
-)
 
-private val brainzPlayerDarkGradientsBrush = Brush.linearGradient(
-    start = Offset.Zero,
-    end = Offset(0f, Float.POSITIVE_INFINITY),
-    colors = listOf(
-        Color(0xFF111111),
-        Color(0xFF131313),
-        Color(0xFF151515),
-        Color(0xFF171717),
-        Color(0xFF272727),
-        Color(0xFF272E27)
+private val frontLayerDarkGradientsBrush: Brush
+    get() = Brush.linearGradient(
+        start = Offset.Zero,
+        end = Offset(0f, Float.POSITIVE_INFINITY),
+        colors = listOf(
+            Color(0xFF111111),
+            Color(0xFF131313),
+            Color(0xFF151515),
+            Color(0xFF171717),
+            Color(0xFF272727),
+            Color(0xFF272E27)
+        )
     )
-)
 
 private val colorSchemeDark = ColorScheme(
     background = app_bg_dark,
@@ -119,7 +121,7 @@ private val colorSchemeDark = ColorScheme(
     text = Color.White,
     listenText = Color.White,
     hint = Color(0xFF8C8C8C),
-    gradientBrush = brainzPlayerDarkGradientsBrush,
+    gradientBrush = frontLayerDarkGradientsBrush,
     placeHolderColor = Color(0xFF1E1E1E),
     dividerColor = app_bg_secondary_dark,
     songsListenedToBG = app_bg_dark,
@@ -158,7 +160,7 @@ private val colorSchemeLight = ColorScheme(
     text = Color.Black,
     listenText = lb_purple,
     hint = Color(0xFF707070),
-    gradientBrush = brainzPlayerLightGradientsBrush,
+    gradientBrush = frontLayerLightGradientsBrush,
     placeHolderColor = Color(0xFFEBEBEB),
     dividerColor = app_bg_secondary_light,
     songsListenedToBG = new_app_bg_light,
@@ -194,7 +196,7 @@ private val DarkColorScheme = darkColorScheme(
     background = app_bg_dark,
     onBackground = app_bg_light,
     primary = app_bg_dark,
-    // Tertiary reserved for brainzPlayer's mini view
+    // Tertiary reserved for frontLayer's mini view
     tertiaryContainer = bp_bottom_song_viewpager_dark,
     onTertiary = bp_color_primary_dark,
     inverseOnSurface = lb_orange,   // Reserved for progress indicators.
@@ -207,7 +209,7 @@ private val LightColorScheme = lightColorScheme(
     background = app_bg_day,
     onBackground = app_bg_light,
     primary = app_bg_day,
-    // Tertiary reserved for brainzPlayer's mini view
+    // Tertiary reserved for frontLayer's mini view
     tertiaryContainer = bp_bottom_song_viewpager_day,
     onTertiary = bp_color_primary_day,
     inverseOnSurface = lb_purple,   // Reserved for progress indicators.
@@ -247,7 +249,7 @@ data class Sizes(
     val listenCardHeight: Dp = 60.dp,
     val listenCardCorner: Dp = 8.dp,
     val dropdownItem: Dp = 20.dp,
-    val brainzPlayerPeekHeight: Dp = 70.dp
+    val frontLayerPeekHeight: Dp = 70.dp
 )
 
 val LocalSizes = staticCompositionLocalOf { Sizes() }

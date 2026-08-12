@@ -18,7 +18,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -31,7 +30,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import org.koin.androidx.compose.koinViewModel
 import org.listenbrainz.android.ui.theme.ListenBrainzTheme
 import org.listenbrainz.shared.viewmodel.ListeningNowViewModel
@@ -75,7 +73,7 @@ fun ListeningNowBackDropScreen(
             if (!listeningNowUIState.isListeningNow)
                 56.dp
             else
-                56.dp + ListenBrainzTheme.sizes.brainzPlayerPeekHeight
+                56.dp + ListenBrainzTheme.sizes.frontLayerPeekHeight
     )
     BackdropScaffold(
         modifier = modifier.padding(top = paddingValues.calculateTopPadding()),
@@ -141,7 +139,7 @@ fun ListeningNowBackDropScreen(
                     coroutineScope = scope,
                     backdropScaffoldState = backdropScaffoldState,
                     modifier = Modifier
-                        .height(ListenBrainzTheme.sizes.brainzPlayerPeekHeight)
+                        .height(ListenBrainzTheme.sizes.frontLayerPeekHeight)
                         .graphicsLayer {
                             alpha =
                                 (backdropScaffoldState.offsetOrZero() / (maxDelta - headerHeight.toPx()))

@@ -43,12 +43,12 @@ class App : Application(), Configuration.Provider {
         }
 
         GlobalScope.launch {
-            deleteBrainzPlayerDatabaseIfExists()
+            cleanupBrainzPlayerResources()
             startListenService(appPreferences)
         }
     }
 
-    private fun deleteBrainzPlayerDatabaseIfExists(){
+    private fun cleanupBrainzPlayerResources(){
         val dbName = "brainzplayer_database"
         val dbFile = context.getDatabasePath(dbName)
         if(dbFile.exists()){
