@@ -253,7 +253,7 @@ val repositoryModule = module {
 }
 
 val viewModelModule = module {
-    viewModel { DashBoardViewModel(get(), get(), get(), get(named(IO_DISPATCHER)),get()) }
+    viewModel { DashBoardViewModel(get(), get(), get(), get(named(IO_DISPATCHER)),get(),get()) }
     viewModel { AppUpdatesViewModel(get(), get(), get()) }
     viewModel { YimViewModel(get(), get(), get(named(IO_DISPATCHER)), get(named(DEFAULT_DISPATCHER))) }
     viewModel { Yim23ViewModel(get(), get(), get(), get(named(IO_DISPATCHER)), get(named(DEFAULT_DISPATCHER))) }
