@@ -40,9 +40,6 @@ actual fun settingsPlatformDataMigrations(
                 PreferenceKeys.LAST_VERSION_CHECK_LAUNCH_COUNT.name,
                 PreferenceKeys.LAST_UPDATE_PROMPT_LAUNCH_COUNT.name,
                 PreferenceKeys.GITHUB_DOWNLOAD_ID.name,
-                PreferenceKeys.ALBUMS_ON_DEVICE.name,
-                PreferenceKeys.SONGS_ON_DEVICE.name,
-                PreferenceKeys.CURRENT_PLAYABLE.name,
                 PreferenceKeys.ONBOARDING.name
             )
         )

@@ -3,7 +3,6 @@ package org.listenbrainz.shared.repository
 import kotlinx.coroutines.flow.Flow
 import org.listenbrainz.shared.model.AppNavigationItem
 import org.listenbrainz.shared.model.InstallSource
-import org.listenbrainz.shared.model.Playable
 import org.listenbrainz.shared.model.UiMode
 import org.listenbrainz.shared.model.LinkedService
 import org.listenbrainz.shared.preferences.DataStorePreference
@@ -27,8 +26,6 @@ interface AppPreferences {
 
     val version: String
     
-    val currentPlayable: DataStorePreference<Playable?>
-    
     /* Login related preferences */
     fun getLoginStatusFlow(): Flow<Int>
     
@@ -50,14 +47,6 @@ interface AppPreferences {
     val shouldListenNewPlayers: DataStorePreference<Boolean>
 
     val isNotificationServiceAllowed: Boolean
-    
-    /* BrainzPlayer Preferences */
-    
-    /** Used to tell the user that they don't have any albums on their device. */
-    val albumsOnDevice: DataStorePreference<Boolean>
-    
-    /** Used to tell the user that they don't have any songs on their device. */
-    val songsOnDevice: DataStorePreference<Boolean>
 
     /** Cache for Login Consent Screen Data */
     val consentScreenDataCache: DataStorePreference<String>

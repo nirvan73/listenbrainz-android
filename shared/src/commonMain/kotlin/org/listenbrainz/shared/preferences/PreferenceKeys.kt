@@ -37,11 +37,6 @@ object PreferenceKeys {
     val LAST_VERSION_CHECK_LAUNCH_COUNT = stringPreferencesKey("last_version_check_launch_count")
     val LAST_UPDATE_PROMPT_LAUNCH_COUNT = stringPreferencesKey("last_update_prompt_launch_count")
 
-    // BrainzPlayer
-    val ALBUMS_ON_DEVICE = booleanPreferencesKey("PREFERENCE_ALBUMS_ON_DEVICE")
-    val SONGS_ON_DEVICE = booleanPreferencesKey("PREFERENCE_SONGS_ON_DEVICE")
-    val CURRENT_PLAYABLE = stringPreferencesKey("CURRENT_PLAYABLE")
-
     // Downloads
     val GITHUB_DOWNLOAD_ID = longPreferencesKey("download_id")
 

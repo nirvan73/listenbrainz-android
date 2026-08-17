@@ -1,8 +1,6 @@
 package org.listenbrainz.android.ui.screens.main
 
 import android.content.res.Configuration
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.tween
@@ -24,18 +22,13 @@ import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import org.koin.androidx.compose.koinViewModel
@@ -44,21 +37,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import org.listenbrainz.shared.model.AppNavigationItem
-import org.listenbrainz.android.model.PermissionStatus
 import org.listenbrainz.android.ui.navigation.AdaptiveNavigationBar
 import org.listenbrainz.android.ui.navigation.AppNavigation
 import org.listenbrainz.android.ui.navigation.NavBarReorderOverlay
 import org.listenbrainz.android.ui.navigation.TopBarActions
-import org.listenbrainz.android.ui.screens.brainzplayer.BrainzPlayerBackDropScreen
-import org.listenbrainz.android.ui.screens.onboarding.permissions.PermissionEnum
-import org.listenbrainz.android.ui.screens.search.BaseSearchScreen
-import org.listenbrainz.android.ui.screens.search.BrainzPlayerSearchScreen
-import org.listenbrainz.android.ui.screens.search.rememberSearchBarState
+import org.listenbrainz.android.ui.screens.listeningNow.ListeningNowBackDropScreen
 import org.listenbrainz.android.ui.screens.settings.SettingsCallbacksToHomeScreen
 import org.listenbrainz.android.ui.theme.ListenBrainzTheme
-import org.listenbrainz.android.util.BrainzPlayerExtensions.toSong
-import org.listenbrainz.android.util.Utils.toPx
-import org.listenbrainz.android.viewmodel.BrainzPlayerViewModel
 import org.listenbrainz.android.viewmodel.DashBoardViewModel
 import org.listenbrainz.shared.viewmodel.ListeningNowViewModel
 
@@ -67,12 +52,10 @@ import org.listenbrainz.shared.viewmodel.ListeningNowViewModel
 @Composable
 fun HomeScreen(
     dashBoardViewModel: DashBoardViewModel = koinViewModel(),
-    brainzPlayerViewModel: BrainzPlayerViewModel = koinViewModel(),
     listeningNowViewModel: ListeningNowViewModel = koinViewModel(),
     settingsCallbacks: SettingsCallbacksToHomeScreen
 ) {
     val dashboardUiState by dashBoardViewModel.uiState.collectAsStateWithLifecycle()
-    val permissions by dashBoardViewModel.permissionStatusFlow.collectAsState()
     val navController = rememberNavController()
     val backdropScaffoldState =
         rememberBackdropScaffoldState(initialValue = BackdropValue.Revealed)
@@ -83,54 +66,11 @@ fun HomeScreen(
     val currentDestination = navBackStackEntry?.destination
     val username = dashboardUiState.username
     var showNavReorderOverlay by rememberSaveable { mutableStateOf(false) }
-    val currentlyPlayingSong by brainzPlayerViewModel.currentlyPlayingSong.collectAsStateWithLifecycle()
-    val currentPlayableState by brainzPlayerViewModel.currentPlayable.collectAsStateWithLifecycle()
     val isLandScape =
         LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val isBackdropInitialised by remember {
-        derivedStateOf {
-            val currentOffset = runCatching {
-                backdropScaffoldState.requireOffset()
-            }.getOrNull()
-
-            currentOffset != null
-        }
-    }
     val listeningNowUIState by listeningNowViewModel.listeningNowUIState.collectAsStateWithLifecycle()
 
-    var maxOffset by remember {
-        mutableFloatStateOf(0f)
-    }
-
-    val playerHeight = ListenBrainzTheme.sizes.brainzPlayerPeekHeight.toPx()
-    LaunchedEffect(isBackdropInitialised) {
-        if (isBackdropInitialised) {
-            maxOffset =
-                maxOf(maxOffset, backdropScaffoldState.requireOffset() - playerHeight)
-        }
-    }
-
-    val desiredBackgroundColor by remember {
-        derivedStateOf {
-            brainzPlayerViewModel.playerBackGroundColor.copy(
-                alpha = runCatching {
-                    1 - (backdropScaffoldState.requireOffset() / maxOffset).coerceIn(
-                        0f,
-                        1f
-                    )
-                }.getOrElse { 0f }
-            )
-        }
-    }
-
-    val isNothingPlaying = remember(currentlyPlayingSong) {
-        currentlyPlayingSong.toSong.title == "null"
-                && currentlyPlayingSong.toSong.artist == "null"
-                || currentPlayableState.songs.isEmpty()
-    }
-
-    val isListeningNowOpenedInConcealedState = backdropScaffoldState.targetValue != BackdropValue.Revealed && isNothingPlaying && listeningNowUIState.isListeningNow
-    val isAudioPermissionGranted = permissions[PermissionEnum.ACCESS_MUSIC_AUDIO] == PermissionStatus.GRANTED || !PermissionEnum.ACCESS_MUSIC_AUDIO.isPermissionApplicable()
+    val isListeningNowOpenedInConcealedState = backdropScaffoldState.targetValue != BackdropValue.Revealed && listeningNowUIState.isListeningNow
 
     val topBarActions = TopBarActions(
         popBackStackInSettingsScreen = {
@@ -143,36 +83,20 @@ fun HomeScreen(
             }
         },
         activateSearch = {
-            when (currentDestination?.route) {
-
-                AppNavigationItem.BrainzPlayer.route -> {
-                    navController.navigate(AppNavigationItem.BrainzPlayerSearchScreen.route) {
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }
-
-                else -> {
-                    navController.navigate(AppNavigationItem.SearchScreen.route) {
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }
+            navController.navigate(AppNavigationItem.SearchScreen.route) {
+                launchSingleTop = true
+                restoreState = true
             }
         }
     )
     val navOrder = dashboardUiState.navBarOrder
 
-    val filteredNavItems = navOrder?.filter {
-        isAudioPermissionGranted || it != AppNavigationItem.BrainzPlayer
-    }
-    val startRoute = filteredNavItems?.firstOrNull()?.route
+    val startRoute = navOrder?.firstOrNull()?.route
 
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(ListenBrainzTheme.colorScheme.background)
-            .background(desiredBackgroundColor),
+            .background(ListenBrainzTheme.colorScheme.background),
         bottomBar = {
             AnimatedVisibility(
                 visible = !isListeningNowOpenedInConcealedState,
@@ -188,13 +112,11 @@ fun HomeScreen(
                 if (!isLandScape) {
                     AdaptiveNavigationBar(
                         navController = navController,
-                        items = filteredNavItems,
+                        items = navOrder,
                         backdropScaffoldState = backdropScaffoldState,
                         scrollToTop = { scrollToTopState = true },
                         username = username,
                         isLandscape = false,
-                        currentlyPlayingSong = currentlyPlayingSong.toSong,
-                        songList = currentPlayableState.songs,
                         listeningNowUIState = listeningNowUIState,
                     )
                 }
@@ -221,23 +143,20 @@ fun HomeScreen(
             if (isLandScape) {
                 AdaptiveNavigationBar(
                     navController = navController,
-                    items = filteredNavItems,
+                    items = navOrder,
                     backdropScaffoldState = backdropScaffoldState,
                     scrollToTop = { scrollToTopState = true },
                     username = username,
                     isLandscape = true,
-                    currentlyPlayingSong = currentlyPlayingSong.toSong,
                     listeningNowUIState = listeningNowUIState,
-                    songList = currentPlayableState.songs,
                 )
             }
 //            if (isGrantedPerms == PermissionStatus.GRANTED.name) {
-            if (startRoute != null && filteredNavItems != null) {
-                BrainzPlayerBackDropScreen(
+            if (startRoute != null && navOrder != null) {
+                ListeningNowBackDropScreen(
                     modifier = Modifier.then(if (!isLandScape && !isListeningNowOpenedInConcealedState) Modifier.navigationBarsPadding() else Modifier),
                     backdropScaffoldState = backdropScaffoldState,
                     paddingValues = it,
-                    brainzPlayerViewModel = brainzPlayerViewModel,
                     isLandscape = isLandScape,
                     listeningNowViewModel = listeningNowViewModel
                 ) {
@@ -265,17 +184,15 @@ fun HomeScreen(
 
     }
     if (showNavReorderOverlay && navOrder != null) {
-        navOrder?.let { items ->
-            NavBarReorderOverlay(
-                items = items,
-                isLandscape = isLandScape,
-                onDismiss = { newOrder ->
-                    scope.launch {
-                        dashBoardViewModel.appPreferences.navBarOrder.set(newOrder)
-                        showNavReorderOverlay = false
-                    }
+        NavBarReorderOverlay(
+            items = navOrder,
+            isLandscape = isLandScape,
+            onDismiss = { newOrder ->
+                scope.launch {
+                    dashBoardViewModel.appPreferences.navBarOrder.set(newOrder)
+                    showNavReorderOverlay = false
                 }
-            )
-        }
+            }
+        )
     }
 }

@@ -1,7 +1,5 @@
 package org.listenbrainz.android.ui.navigation
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -29,13 +27,11 @@ import org.listenbrainz.shared.model.AppNavigationItem
 import org.listenbrainz.shared.model.AppNavigationItem.Profile.ARG_USERNAME
 import org.listenbrainz.android.ui.screens.album.AlbumScreen
 import org.listenbrainz.android.ui.screens.artist.ArtistScreen
-import org.listenbrainz.android.ui.screens.brainzplayer.BrainzPlayerScreen
 import org.listenbrainz.android.ui.screens.explore.ExploreScreen
 import org.listenbrainz.android.ui.screens.feed.FeedScreen
 import org.listenbrainz.android.ui.screens.playlist.PlaylistDetailScreen
 import org.listenbrainz.android.ui.screens.profile.ProfileScreen
 import org.listenbrainz.android.ui.screens.search.BaseSearchScreen
-import org.listenbrainz.android.ui.screens.search.BrainzPlayerSearchScreen
 import org.listenbrainz.android.ui.screens.settings.SettingsCallbacksToHomeScreen
 import org.listenbrainz.android.ui.screens.settings.SettingsScreen
 import org.listenbrainz.android.viewmodel.DashBoardViewModel
@@ -101,11 +97,6 @@ fun AppNavigation(
                 goToUserPage = ::goToUserProfile,
                 goToArtistPage = ::goToArtistPage,
                 topAppBarActions = topAppBarActions
-            )
-        }
-        appComposable(route = AppNavigationItem.BrainzPlayer.route) {
-            BrainzPlayerScreen(
-                topBarActions = topAppBarActions
             )
         }
         appComposable(route = AppNavigationItem.Explore.route) {
@@ -231,17 +222,6 @@ fun AppNavigation(
                     goToPlaylist = ::goToPlaylist,
                     goToArtist = ::goToArtistPage,
                     goToAlbum = ::goToAlbumPage
-                )
-            }
-        }
-        appComposable(
-            route = AppNavigationItem.BrainzPlayerSearchScreen.route
-        ){
-            Box(modifier = Modifier.fillMaxSize()){
-                BrainzPlayerSearchScreen(
-                    deactivate = {
-                        navController.navigateUp()
-                    }
                 )
             }
         }

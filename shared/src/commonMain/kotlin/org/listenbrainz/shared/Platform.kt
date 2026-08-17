@@ -13,10 +13,6 @@ import org.listenbrainz.shared.repository.remoteplayer.RemotePlaybackHandler
 import org.listenbrainz.shared.service.ListensService
 import org.listenbrainz.shared.service.UserService
 import org.listenbrainz.shared.service.YouTubeApiService
-import org.listenbrainz.shared.di.database.BrainzPlayerDatabase
-import org.listenbrainz.shared.repository.PlatformContext
-import org.listenbrainz.shared.util.SongsData
-import org.listenbrainz.shared.util.AlbumsData
 
 expect fun platform(): String
 
@@ -32,8 +28,6 @@ expect fun provideRemotePlaybackHandler(
     youTubeApiService: YouTubeApiService
 ): RemotePlaybackHandler
 
-expect fun getBrainzPlayerDatabase(): RoomDatabase.Builder<BrainzPlayerDatabase>
-
 expect fun provideListensRepositoryImpl(
     service: ListensService,
     appPreferences: AppPreferences,
@@ -44,7 +38,3 @@ expect fun provideListensRepositoryImpl(
 
 
 expect fun getListensSubmissionDatabase(): RoomDatabase.Builder<ListensSubmissionDatabase>
-
-expect fun provideSongData(): SongsData
-
-expect fun provideAlbumsData(): AlbumsData

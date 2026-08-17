@@ -1,15 +1,6 @@
 package org.listenbrainz.android.ui.components
 
 import android.content.res.Configuration
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.SizeTransform
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.with
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,8 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
@@ -30,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,39 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.listenbrainz.android.ui.theme.ListenBrainzTheme
 import org.listenbrainz.android.ui.theme.lb_yellow
-import org.listenbrainz.android.util.BrainzPlayerExtensions.toSong
-import org.listenbrainz.android.viewmodel.BrainzPlayerViewModel
-
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-fun PlayPauseIcon(
-    icon: ImageVector,
-    viewModel: BrainzPlayerViewModel,
-    modifier: Modifier = Modifier,
-    tint: Color = Color.Black
-) {
-    AnimatedContent(
-        targetState = icon,
-        transitionSpec = {
-            when (targetState) {
-                Icons.Rounded.PlayArrow -> {
-                    slideInVertically { height -> -height } + fadeIn() with
-                            slideOutHorizontally { height -> height } + fadeOut()
-                }
-
-                else -> {
-                    slideInVertically { height -> height } + fadeIn() with
-                            slideOutHorizontally { height -> -height } + fadeOut()
-                }
-            }.using(SizeTransform(false))
-        }
-
-    ) {
-        Icon(imageVector = it, contentDescription = "", modifier.clickable {
-            viewModel.playOrToggleSong(viewModel.currentlyPlayingSong.value.toSong, true)
-        }, tint = tint)
-    }
-}
 
 
 @Composable

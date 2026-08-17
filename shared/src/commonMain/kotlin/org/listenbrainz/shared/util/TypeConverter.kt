@@ -11,43 +11,10 @@ import kotlinx.datetime.format.Padding
 import kotlinx.datetime.format.char
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.json.Json
-import org.listenbrainz.shared.model.AlbumEntity
-import org.listenbrainz.shared.model.Playable
-import org.listenbrainz.shared.model.SongEntity
 
 object TypeConverter {
 
     private val json = Json { ignoreUnknownKeys = true }
-
-    fun playableToJSON(playable: Playable): String = json.encodeToString(playable)
-
-    fun playableFromJSON(playableJSON: String): Playable {
-        return json.decodeFromString(playableJSON)
-    }
-
-    @androidx.room.TypeConverter
-    fun playlistToJSON(playlist: List<SongEntity>): String = json.encodeToString(playlist)
-
-    @androidx.room.TypeConverter
-    fun playlistFromJSON(playListJSON: String): List<SongEntity> {
-        return try {
-            json.decodeFromString(playListJSON)
-        } catch (e: Exception) {
-            emptyList()
-        }
-    }
-
-    @androidx.room.TypeConverter
-    fun artistAlbumsToJSON(albums: List<AlbumEntity>): String = json.encodeToString(albums)
-
-    @androidx.room.TypeConverter
-    fun artistAlbumsFromJSON(albumsJSON: String): List<AlbumEntity> {
-        return try {
-            json.decodeFromString(albumsJSON)
-        } catch (e: Exception) {
-            emptyList()
-        }
-    }
 
     @androidx.room.TypeConverter
     fun nullableListToJSON(list: List<String>?): String = json.encodeToString(list)

@@ -15,13 +15,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.listenbrainz.shared.BottomNavDefaults
 import org.listenbrainz.shared.model.AppNavigationItem
 import org.listenbrainz.shared.model.InstallSource
 import org.listenbrainz.shared.model.LinkedService
-import org.listenbrainz.shared.model.Playable
 import org.listenbrainz.shared.model.UiMode
 import org.listenbrainz.shared.model.UiMode.Companion.asUiMode
 import org.listenbrainz.shared.preferences.DataStorePreference
@@ -113,11 +111,6 @@ class AppPreferencesImpl(private val context: PlatformContext) : AppPreferences 
         fun String?.asLinkedServiceList(): List<LinkedService> {
             if (this.isNullOrEmpty()) return emptyList()
             return runCatching { json.decodeFromString<List<LinkedService>>(this) }.getOrDefault(emptyList())
-        }
-
-        fun String?.asPlayable(): Playable? {
-            if (this.isNullOrBlank()) return null
-            return runCatching { json.decodeFromString<Playable>(this) }.getOrNull()
         }
     }
 
@@ -252,23 +245,6 @@ class AppPreferencesImpl(private val context: PlatformContext) : AppPreferences 
         return@withContext true
     }
 
-    override val currentPlayable: DataStorePreference<Playable?>
-        get() = object : DataStorePreference<Playable?> {
-            override fun getFlow(): Flow<Playable?> = mapData { prefs ->
-                prefs[PreferenceKeys.CURRENT_PLAYABLE].asPlayable()
-            }
-
-            override suspend fun set(value: Playable?) {
-                dataStore().edit { prefs ->
-                    if (value == null) {
-                        prefs.remove(PreferenceKeys.CURRENT_PLAYABLE)
-                    } else {
-                        prefs[PreferenceKeys.CURRENT_PLAYABLE] = json.encodeToString(value)
-                    }
-                }
-            }
-        }
-
     /* Login Preferences */
 
     override fun getLoginStatusFlow(): Flow<Int> =
@@ -348,33 +324,6 @@ class AppPreferencesImpl(private val context: PlatformContext) : AppPreferences 
                     } else {
                         prefs[PreferenceKeys.REFESH_TOKEN] = value
                     }
-                }
-            }
-        }
-
-    /* BrainzPlayer Preferences */
-    override val albumsOnDevice: DataStorePreference<Boolean>
-        get() = object : DataStorePreference<Boolean> {
-            override fun getFlow(): Flow<Boolean> = mapData { prefs ->
-                prefs[PreferenceKeys.ALBUMS_ON_DEVICE] ?: true
-            }
-
-            override suspend fun set(value: Boolean) {
-                dataStore().edit { prefs ->
-                    prefs[PreferenceKeys.ALBUMS_ON_DEVICE] = value
-                }
-            }
-        }
-
-    override val songsOnDevice: DataStorePreference<Boolean>
-        get() = object : DataStorePreference<Boolean> {
-            override fun getFlow(): Flow<Boolean> = mapData { prefs ->
-                prefs[PreferenceKeys.SONGS_ON_DEVICE] ?: true
-            }
-
-            override suspend fun set(value: Boolean) {
-                dataStore().edit { prefs ->
-                    prefs[PreferenceKeys.SONGS_ON_DEVICE] = value
                 }
             }
         }

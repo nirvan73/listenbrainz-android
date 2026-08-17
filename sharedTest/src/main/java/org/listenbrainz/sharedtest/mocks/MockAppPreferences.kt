@@ -4,7 +4,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import org.listenbrainz.shared.model.InstallSource
-import org.listenbrainz.shared.model.Playable
 import org.listenbrainz.shared.model.UiMode
 import org.listenbrainz.shared.repository.AppPreferences
 import org.listenbrainz.shared.util.Constants.Strings.STATUS_LOGGED_IN
@@ -95,10 +94,6 @@ class MockAppPreferences : AppPreferences {
         }
     override val isNotificationServiceAllowed: Boolean
         get() = TODO("Not yet implemented")
-    override val albumsOnDevice: DataStorePreference<Boolean>
-        get() = TODO("Not yet implemented")
-    override val songsOnDevice: DataStorePreference<Boolean>
-        get() = TODO("Not yet implemented")
 
     override val requestedPermissionsList: DataStorePreference<List<String>> =
         object : DataStorePreference<List<String>> {
@@ -140,8 +135,6 @@ class MockAppPreferences : AppPreferences {
     }
 
     override val version: String
-        get() = TODO("Not yet implemented")
-    override val currentPlayable: DataStorePreference<Playable?>
         get() = TODO("Not yet implemented")
 
     override fun getLoginStatusFlow(): Flow<Int> = flow {

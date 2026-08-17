@@ -115,7 +115,6 @@
     <string name="remove_uri">Aus Sammlung entfernen</string>
     <string name="browse_content">Inhalt durchsuchen</string>
     <string name="title_current_track">Aktueller Titel</string>
-    <string name="bp_loading_text">Lade deine Musik-Bibliothek</string>
     <string name="dash_tag">Tag</string>
     <string name="save_checkbox">Speichern</string>
     <string name="select_button">Auswählen</string>
@@ -130,7 +129,6 @@
     <string name="cb_review_tc">Du bestätigst und stimmst zu, dass deine Rezensionen zu CritiqueBrainz unter einer Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0) Lizenz lizenziert wird. Du stimmst zu, dein Werk im Rahmen dieser Lizenz zu lizenzieren. Du versichert und garantierst, das du sämtliche Rechte in und an dem Werk besitzt oder kontrollierst, dass nichts in dem Werk die Rechte von Dritten verletzt, und dass du die Erlaubnis hast, um das Werk zu verwenden und unter der gewählten Creative Commons-Lizenz zu lizenzieren. Abschließend gibst du der MetaBrainz-Stiftung die Erlaubnis zum Lizenzieren dieses Inhaltes für die kommerzielle Nutzung außerhalb von Creative-Commons-Lizenzen, um die Operationen der Organisation zu unterstützen.</string>
     <string name="login_failed_user_info">Abrufen der Benutzer-Informationen fehlgeschlagen</string>
     <string name="state_unrecognised_artist">Unbekannter Künstler</string>
-    <string name="brainzplayer_notification_channel_name">Aktuelle BrainzPlayer-Wiedergabe</string>
     <string name="new_player" formatted="true" comment="(%1 = App name) detected (shown in notification, when a new music player is detected)">%1$s erkannt</string>
     <string name="login_success_access_token">Zugriffs-Token erfolgreich erhalten</string>
     <string name="new_app">Neue App</string>
@@ -143,7 +141,6 @@
     <string name="tap_to_edit">(Zum Bearbeiten tippen)</string>
     <string name="no_apps_enabled">Keine App ist aktiviert</string>
     <string name="login_success_user_info">Benutzer-Informationen erfolgreich abgerufen</string>
-    <string name="brainzplayer_notification_channel_description">Steuerung für aktuell wiedergegebenes Lied</string>
     <string name="is_in_collection_feedback">Ist in der Benutzersammlung? %1$s</string>
     <string name="settings_listenbrainz_token">ListenBrainz Benutzer-Token</string>
     <string name="permission_screen_rationale">ListenBrainz needs permissions for playback, history tracking, and submissions. We respect your privacy and don\'t collect or share personal data.</string>

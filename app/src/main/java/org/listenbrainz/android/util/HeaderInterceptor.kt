@@ -1,6 +1,5 @@
 package org.listenbrainz.android.util
 
-import com.google.common.net.HttpHeaders.AUTHORIZATION
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import okhttp3.Interceptor
@@ -18,13 +17,13 @@ class HeaderInterceptor (
         var request: Request = chain.request()
         
         return runBlocking {
-            if (request.headers[AUTHORIZATION].isNullOrEmpty()) {
+            if (request.header("Authorization").isNullOrEmpty()) {
                 runCatching {
                     withTimeout(3000) {
                         val accessToken = appPreferences.lbAccessToken.get()
                         if (accessToken.isNotEmpty()) {
                             request = request.newBuilder()
-                                .addHeader(AUTHORIZATION, "Token $accessToken")
+                                .addHeader("Authorization", "Token $accessToken")
                                 .build()
                         }
                     }

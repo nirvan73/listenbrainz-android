@@ -10,7 +10,6 @@ sealed class AppNavigationItem(
     val iconSelectedId: String,
     val title: String
 ) {
-    data object BrainzPlayer : AppNavigationItem("brainzplayer", "player_unselected", "player_selected", "Player")
     data object Explore : AppNavigationItem("explore", "explore_unselected", "explore_selected", "Explore")
     data object Profile : AppNavigationItem("profile", "profile_unselected", "profile_selected", "Profile") {
         const val ARG_USERNAME = "username"
@@ -26,5 +25,4 @@ sealed class AppNavigationItem(
     data object Album : AppNavigationItem("album", "ic_album", "ic_album", "Artist > Album")
     data object PlaylistScreen : AppNavigationItem("playlist", "ic_queue_music", "ic_queue_music", "Playlist")
     data object SearchScreen: AppNavigationItem("search","ic_search","ic_search","Search")
-    data object BrainzPlayerSearchScreen: AppNavigationItem("brainzplayersearch", "ic_search","ic_search","Player Search")
 }

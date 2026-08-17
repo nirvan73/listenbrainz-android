@@ -207,17 +207,12 @@
     <string name="title_current_track">Current Track</string>
     <string name="title_image_size">Image size</string>
     <string name="title_image_scale_type">Scale type</string>
-    <string name="brainzplayer_notification_channel_name">BrainzPlayer Now Playing</string>
-    <string name="brainzplayer_notification_channel_description">Currently Playing Song Controls</string>
 
     <!-- Year in Music -->
     <string name="title_activity_year_in_music">YearInMusicActivity</string>
 
     <!-- News Brainz Acitivity -->
     <string name="title_activity_news_brainz">NewsBrainzActivity</string>
-
-    <!-- BrainzPlayer -->
-    <string name="bp_loading_text">Loading your music library</string>
 
     <!-- Test Tags -->
     <!-- Yim test tags-->

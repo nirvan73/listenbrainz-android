@@ -16,8 +16,6 @@ val AppNavigationItem.iconSelected: Int
     get() = iconMap[iconSelectedId] ?: R.drawable.ic_info
 
 private val iconMap = mapOf(
-    "player_unselected" to R.drawable.player_unselected,
-    "player_selected" to R.drawable.player_selected,
     "explore_unselected" to R.drawable.explore_unselected,
     "explore_selected" to R.drawable.explore_selected,
     "profile_unselected" to R.drawable.profile_unselected,
