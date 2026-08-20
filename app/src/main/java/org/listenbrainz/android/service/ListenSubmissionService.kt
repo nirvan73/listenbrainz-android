@@ -19,6 +19,7 @@ import org.koin.android.ext.android.inject
 import org.listenbrainz.android.application.App
 import org.listenbrainz.shared.repository.AppPreferences
 import org.listenbrainz.shared.repository.listenservicemanager.ListenServiceManager
+import org.listenbrainz.shared.util.AndroidNotificationManager
 import org.listenbrainz.shared.util.ListenSessionListener
 import org.listenbrainz.shared.util.ListenSubmissionNotification.NOTIFICATION_ID
 import org.listenbrainz.shared.util.Log
@@ -31,7 +32,7 @@ class ListenSubmissionService(
     private val appPreferences: AppPreferences by inject()
     
     private val serviceManager: ListenServiceManager by inject()
-    private val notificationManager: PlatformNotificationManager by inject()
+    private val notificationManager: AndroidNotificationManager by inject()
     
     private val scope = MainScope()
 
@@ -137,7 +138,7 @@ class ListenSubmissionService(
     var isStarted = false
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     fun startForeground() {
-        val notification = notificationManager.postListeningNotification(null) as Notification
+        val notification = notificationManager.createNotification(null)
         if (!isStarted) {
             ServiceCompat.startForeground(
                 this,

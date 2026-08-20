@@ -91,7 +91,9 @@ actual fun provideSharedNotificationManager(
     arrayProvider: ArrayProvider
 ): PlatformNotificationManager {
 
-    val targetClass = NotificationConfig.targetActivityClass ?: Class.forName("android.app.Activity")
+    val targetClass = requireNotNull(NotificationConfig.targetActivityClass){
+        "Notification target Activity is not configured."
+    }
     return AndroidNotificationManager(
         targetActivityClass = targetClass,
         drawableProvider = drawableProvider,

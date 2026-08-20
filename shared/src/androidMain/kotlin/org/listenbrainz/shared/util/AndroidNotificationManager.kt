@@ -49,12 +49,11 @@ class AndroidNotificationManager(
     }
 
     @SuppressLint("MissingPermission")
-    override fun postListeningNotification(track: PlayingTrack?): Any  {
+    override fun postListeningNotification(track: PlayingTrack?)  {
         val notification = createNotification(track)
         if(manager.areNotificationsEnabled()){
             manager.notify(NOTIFICATION_ID,notification)
         }
-        return notification
     }
 
     fun createNotification(playingTrack: PlayingTrack?): Notification{

@@ -205,35 +205,37 @@ open class ListenSubmissionState : KoinComponent {
 
     private fun submitPlayingNow() {
         if (!playingTrack.playingNowSubmitted) {
+            val track = playingTrack
             scope.launch {
                 scheduler.enqueue(
-                    id = "playing-now-${playingTrack.pkgName}",
+                    id = "playing-now-${track.pkgName}-${System.currentTimeMillis()}",
                     trigger = TaskTrigger.OneTime(initialDelayMs = 0),
                     workerClassName = "ListenSubmissionWorker",
                     inputJson = Json.encodeToString(
-                        ListenWorkerInput(playingTrack, ListenType.PLAYING_NOW)
+                        ListenWorkerInput(track, ListenType.PLAYING_NOW)
                     ),
                     constraints = Constraints(requiresNetwork = true)
                 )
             }
-            playingTrack.playingNowSubmitted = true
+            track.playingNowSubmitted = true
         }
     }
 
     private fun submitListen() {
         if (!playingTrack.submitted) {
+            val track = playingTrack
            scope.launch {
                scheduler.enqueue(
-                   id = "listen-${playingTrack.id}",
+                   id = "listen-${track.id}-${System.currentTimeMillis()}",
                    trigger = TaskTrigger.OneTime(initialDelayMs = 0),
                    workerClassName = "ListenSubmissionWorker",
                    inputJson = Json.encodeToString(
-                       ListenWorkerInput(playingTrack, ListenType.SINGLE)
+                       ListenWorkerInput(track, ListenType.SINGLE)
                    ),
                    constraints = Constraints(requiresNetwork = true)
                )
            }
-            playingTrack.submitted = true
+            track.submitted = true
         }
     }
 
