@@ -108,7 +108,7 @@ actual fun provideSharedNotificationManager(
 ): PlatformNotificationManager {
 
     return IosNotificationManager(
-        notificationId = ListenSubmissionNotification.NOTIFICATION_ID.toString(),
+        notificationId = ListenSubmissionNotification.NOTIFICATION_ID,
         listeningTitle = "♫ Listening now",
     )
 }

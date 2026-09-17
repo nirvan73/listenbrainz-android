@@ -70,9 +70,10 @@ open class ListenSubmissionState : KoinComponent {
         @SuppressLint("MissingPermission")
         trackCompletionTimer.setOnTimerListener(listener = object : OnTimerListener {
             override fun onTimerStarted() {
+                val track = playingTrack
                 scope.launch {
                     if (canShowNotifications()) {
-                        notificationManager.postListeningNotification(playingTrack)
+                        notificationManager.postListeningNotification(track)
                     }
                 }
             }
@@ -147,8 +148,9 @@ open class ListenSubmissionState : KoinComponent {
 
     @SuppressLint("MissingPermission")
     fun alertMediaPlayerRemoved(packageName: String) {
+        val track = playingTrack
         scope.launch {
-            if (canShowNotifications() && packageName == playingTrack.pkgName) {
+            if (canShowNotifications() && packageName == track.pkgName) {
                 logger.d("Media player for $packageName removed, cleaning up notification.")
                 notificationManager.postListeningNotification(null)
             }
